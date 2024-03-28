@@ -3,7 +3,7 @@ package com.br.teste.attus.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 import java.util.Objects;
 /**

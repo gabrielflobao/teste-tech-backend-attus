@@ -19,59 +19,52 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/endereco")
 public class EnderecoController {
-    private static final Logger log = LoggerFactory.getLogger(EnderecoController.class);
-
     @Autowired
     private EnderecoService service;
 
     @GetMapping("/listar")
     public ResponseEntity<List<EnderecoDTO>> listaEnderecos() {
         List<EnderecoDTO> enderecos = service.findAll();
-        log.warn("Buscando enderecos...");
-        if (enderecos.isEmpty()) {
-            log.error("Não há endereços cadastrados.");
-            return ResponseEntity.notFound().build();
-        }
-        log.info("Enderecos encontrados!");
         return ResponseEntity.ok(enderecos);
     }
 
     @GetMapping("/buscar/{id}")
     public ResponseEntity<EnderecoDTO> buscaEnderecoId(@PathVariable("id") Long id) {
-        Optional<EnderecoDTO> endereco = service.findById(id);
-        log.info("Buscando endereco...");
-        if (endereco.isEmpty()) {
-            log.error("Não há esse endereco cadastrado de id {}", id);
-            return ResponseEntity.notFound().build();
-        }
-        log.info("Endereco encontrado!");
-        return ResponseEntity.ok(endereco.get());
+        EnderecoDTO endereco = service.findById(id);
+        return ResponseEntity.ok(endereco);
     }
+
+    @GetMapping("/buscar/pessoa/{id}")
+    public List<EnderecoDTO> buscarEnderecosPorPessoa(@PathVariable("id") Long id) {
+        List<EnderecoDTO> endereco = service.findByPessoaId(id);
+        return endereco;
+    }
+
 
     @GetMapping("/buscarEnderecos")
     public ResponseEntity<List<EnderecoDTO>> buscarEnderecosPorIds(@RequestParam List<Long> ids) {
         List<EnderecoDTO> enderecos = service.findAllById(ids);
-        if (!enderecos.isEmpty()) {
-            return ResponseEntity.ok(enderecos);
-        }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(enderecos);
     }
 
     @PostMapping("/cadastrar")
     public ResponseEntity<EnderecoDTO> cadastrarEndereco(@RequestBody EnderecoDTO cadastroEndereco) {
-        Optional<EnderecoDTO> enderecoDTO = service.save(cadastroEndereco);
-        if (enderecoDTO.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        log.info("Endereco cadastrado!");
-        return ResponseEntity.status(HttpStatus.CREATED).body(enderecoDTO.get());
+        EnderecoDTO enderecoDTO = service.save(cadastroEndereco);
+        return ResponseEntity.status(HttpStatus.CREATED).body(enderecoDTO);
 
     }
 
     @PostMapping("/cadastrarEnderecos")
     public ResponseEntity cadastrarEnderecos(@RequestBody List<EnderecoDTO> cadastroEnderecos) {
         cadastroEnderecos.forEach(enderecoDTO -> service.save(enderecoDTO));
-        log.info("Enderecos cadastrados!");
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+    @PutMapping(value = "/principal/{id}")
+    public ResponseEntity<EnderecoDTO> definirEnderecoPrincipal(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(service.defineEnderecoPrincipal(id));
+
+    }
+
+
 }

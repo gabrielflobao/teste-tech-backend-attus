@@ -1,7 +1,9 @@
 package com.br.teste.attus.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDate;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 /**
  * Author : Gabriel F F Lobão
@@ -11,7 +13,7 @@ public class PessoaDTO {
     private Long id;
 
     private String nomeCompleto;
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private Date dataNascimento;
 
     private List<EnderecoDTO> enderecos;

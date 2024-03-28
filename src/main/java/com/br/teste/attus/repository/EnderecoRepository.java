@@ -3,6 +3,7 @@ package com.br.teste.attus.repository;
 import com.br.teste.attus.dto.EnderecoDTO;
 import com.br.teste.attus.entity.Endereco;
 import com.br.teste.attus.entity.Pessoa;
+import com.br.teste.attus.enuns.TipoPrincipal;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,4 +19,9 @@ public interface EnderecoRepository extends JpaRepository<Endereco,Long> {
 
     List<Endereco> findByPessoaId(Long id);
 
+    @Query("SELECT DECODE(t.tpPrincipal,'S',TRUE,FALSE) FROM Endereco t where t.id= :param  ")
+    boolean existePrincipalEndereco(@Param("param") Long id);
+    @Query("SELECT t FROM Endereco t where t.id = :id and t.tpPrincipal = :sn")
+    Optional<Endereco> findPrincipalEndereco(@Param("id") Long id,@Param("sn") TipoPrincipal sn);
+    List<Endereco> findEnderecoByPessoaId(Long id);
 }
