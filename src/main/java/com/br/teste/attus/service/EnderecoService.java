@@ -3,7 +3,7 @@ package com.br.teste.attus.service;
 import com.br.teste.attus.dto.EnderecoDTO;
 import com.br.teste.attus.enuns.TipoPrincipal;
 import com.br.teste.attus.exceptions.endereco.EnderecoExistenteException;
-import com.br.teste.attus.exceptions.endereco.EnderecoInexistenteException;
+import com.br.teste.attus.exceptions.endereco.EnderecoNotFoundException;
 import com.br.teste.attus.exceptions.endereco.EnderecoPrincipalExisteException;
 import com.br.teste.attus.exceptions.endereco.EnderecoPrincipalInexistente;
 import com.br.teste.attus.mapper.EnderecoMapper;
@@ -13,6 +13,7 @@ import com.br.teste.attus.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,15 +35,36 @@ public class EnderecoService {
 
     }
 
-    public Optional<EnderecoDTO> update(EnderecoDTO endereco) {
+    public List<EnderecoDTO> saveAll(List<EnderecoDTO> endereco) {
+        List<Endereco> enderecosSalvar = new ArrayList<Endereco>();
+        endereco.forEach( enderecoDTO -> {
+            boolean existePrincipal = repository.existsEnderecoByTpPrincipalSim(enderecoDTO.getPessoa().getId());
+            if(existePrincipal && enderecoDTO.getTpPrincipal().equals(TipoPrincipal.S)) {
+                throw new EnderecoPrincipalExisteException("Já existe endereço principal","Existe endereço principal para esta pessoa :"
+                +enderecoDTO.getPessoa().getNomeCompleto()+"\n"+"id:"+enderecoDTO.getPessoa().getId());
+            }
+            enderecosSalvar.add(EnderecoMapper.toRequest(enderecoDTO));
+        });
+
+        if(enderecosSalvar.isEmpty()){
+            throw new EnderecoNotFoundException("Não há endereços para salvar","Não existem endereços para salvar");
+        }
+
+        return EnderecoMapper.toReponseList(repository.saveAll(enderecosSalvar));
+
+    }
+
+
+
+    public EnderecoDTO update(EnderecoDTO endereco) {
         Endereco entity = EnderecoMapper.toRequest(endereco);
-        return Optional.of(EnderecoMapper.toReponse(repository.save(entity)));
+        return EnderecoMapper.toReponse(repository.save(entity));
     }
 
     public List<EnderecoDTO> findAll() {
         List<Endereco> list = repository.findAll();
         if(list.isEmpty()){
-            throw new EnderecoInexistenteException("Não existe endereços","Não existe endereços cadastrados");
+            throw new EnderecoNotFoundException("Não existe endereços","Não existe endereços cadastrados");
         }
         return EnderecoMapper.toReponseList(list);
     }
@@ -58,7 +80,7 @@ public class EnderecoService {
     public List<EnderecoDTO> findAllById(List<Long> id) {
         List<Endereco> entitys = repository.findAllById(id);
         if(entitys.isEmpty()){
-            throw new EnderecoInexistenteException("Endereço não encontrado",
+            throw new EnderecoNotFoundException("Endereço não encontrado",
                     "Endereço referente ao id mencionado não foi encontrado");
         }
         return EnderecoMapper.toReponseList(entitys);

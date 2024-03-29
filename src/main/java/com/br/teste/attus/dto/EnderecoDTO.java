@@ -1,7 +1,9 @@
 package com.br.teste.attus.dto;
 
+import com.br.teste.attus.entity.Pessoa;
 import com.br.teste.attus.enuns.EstadoBrasil;
 import com.br.teste.attus.enuns.TipoPrincipal;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Author : Gabriel F F Lobão
@@ -18,7 +20,8 @@ public class EnderecoDTO {
 
     private TipoPrincipal tpPrincipal;
     private EstadoBrasil estado;
-
+    @JsonIgnore
+    private Pessoa pessoa;
     public EnderecoDTO () {
 
     }
@@ -27,13 +30,14 @@ public class EnderecoDTO {
                        String logradouro,
                        String cep, Integer numero
             , String cidade,
-                       TipoPrincipal tpPrincipal, EstadoBrasil estado) {
+                       TipoPrincipal tpPrincipal, EstadoBrasil estado,Pessoa pessoa) {
         this.logradouro = logradouro;
         this.cep = cep;
         this.numero = numero;
         this.cidade = cidade;
         this.tpPrincipal = tpPrincipal;
         this.estado = estado;
+        this.pessoa=pessoa;
     }
 
     public String getLogradouro() {
@@ -84,4 +88,11 @@ public class EnderecoDTO {
         this.estado = estado;
     }
 
+    public Pessoa getPessoa() {
+        return pessoa;
+    }
+
+    public void setPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
+    }
 }

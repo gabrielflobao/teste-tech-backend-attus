@@ -12,7 +12,7 @@ import jakarta.persistence.*;
 @Table(name = "TB_ENDERECO")
 public class Endereco {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "LOGRADOURO")
@@ -33,7 +33,8 @@ public class Endereco {
     @Column(name = "ESTADO")
     private EstadoBrasil estado;
 
-    @ManyToOne(fetch = FetchType.LAZY,targetEntity = Pessoa.class)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Pessoa.class,cascade = CascadeType.ALL)
+    @JoinColumn(name = "ID_PESSOA")
     @JsonIgnore
     private Pessoa pessoa;
 
@@ -114,4 +115,6 @@ public class Endereco {
     public Pessoa getPessoa() {
         return pessoa;
     }
+
+
 }

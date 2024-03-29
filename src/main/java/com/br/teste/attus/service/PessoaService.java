@@ -27,7 +27,7 @@ public class PessoaService {
     }
 
     public List<PessoaDTO> saveLista(List<PessoaDTO>  pessoa) {
-        return PessoaMapper.toReponseList(repository.saveAll(PessoaMapper.toRequestList(pessoa)));
+        return PessoaMapper.toReponseList(repository.saveAll(PessoaMapper.toRequestListSave(pessoa)));
     }
 
     public List<PessoaDTO> findAll() {

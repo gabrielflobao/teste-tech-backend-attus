@@ -74,12 +74,12 @@ public class Pessoa {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Pessoa pessoa = (Pessoa) o;
-        return Objects.equals(id, pessoa.id) && Objects.equals(nomeCompleto, pessoa.nomeCompleto) && Objects.equals(dataNascimento, pessoa.dataNascimento) && Objects.equals(enderecos, pessoa.enderecos);
+        return Objects.equals(nomeCompleto, pessoa.nomeCompleto) && Objects.equals(dataNascimento, pessoa.dataNascimento) && Objects.equals(enderecos, pessoa.enderecos);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nomeCompleto, dataNascimento, enderecos);
+        return Objects.hash(nomeCompleto, dataNascimento, enderecos);
     }
 }
 

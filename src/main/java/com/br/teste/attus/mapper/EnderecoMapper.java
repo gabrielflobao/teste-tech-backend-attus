@@ -3,6 +3,7 @@ package com.br.teste.attus.mapper;
 import com.br.teste.attus.dto.EnderecoDTO;
 import com.br.teste.attus.dto.PessoaDTO;
 import com.br.teste.attus.entity.Endereco;
+import com.br.teste.attus.entity.Pessoa;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,4 +49,19 @@ public class EnderecoMapper {
 
     }
 
+    public static List<Endereco> toRequestListSave(List<EnderecoDTO> enderecos, Pessoa pessoa) {
+        List<Endereco> entities = new ArrayList<>();
+        for (EnderecoDTO enderecoDTO : enderecos) {
+            Endereco entity = new Endereco();
+            entity.setLogradouro(enderecoDTO.getLogradouro());
+            entity.setCep(enderecoDTO.getCep());
+            entity.setNumero(enderecoDTO.getNumero());
+            entity.setCidade(enderecoDTO.getCidade());
+            entity.setEstado(enderecoDTO.getEstado());
+            entity.setTpPrincipal(enderecoDTO.getTpPrincipal());
+            entity.setPessoa(pessoa);
+            entities.add(entity);
+        }
+        return entities;
+    }
 }

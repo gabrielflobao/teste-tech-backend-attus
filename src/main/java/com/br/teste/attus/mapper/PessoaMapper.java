@@ -17,6 +17,7 @@ public class PessoaMapper {
     public static PessoaDTO toReponse(Pessoa object) {
         if (object != null) {
             PessoaDTO dto = new PessoaDTO();
+            dto.setId(object.getId());
             dto.setNomeCompleto(object.getNomeCompleto());
             dto.setDataNascimento(object.getDataNascimento());
             dto.setEnderecos(EnderecoMapper.toReponseList(object.getEnderecos()));
@@ -31,17 +32,32 @@ public class PessoaMapper {
 
     public static Pessoa toRequest(PessoaDTO object) {
         Pessoa entity = new Pessoa();
+        entity.setId(object.getId());
         entity.setNomeCompleto(object.getNomeCompleto());
         entity.setDataNascimento(object.getDataNascimento());
-        entity.setEnderecos(EnderecoMapper.toRequestList(object.getEnderecos()));
+        entity.setEnderecos(EnderecoMapper.toRequestListSave(object.getEnderecos(),entity));
         return entity;
 
     }
+    public static Pessoa toRequestSave(PessoaDTO object) {
+        Pessoa entity = new Pessoa();
+        entity.setId(object.getId());
+        entity.setNomeCompleto(object.getNomeCompleto());
+        entity.setDataNascimento(object.getDataNascimento());
+        entity.setEnderecos(EnderecoMapper.toRequestListSave(object.getEnderecos(),entity));
+        return entity;
+
+    }
+
     public static List<Pessoa> toRequestList(List<PessoaDTO> list) {
         if(!list.isEmpty()) {
             return list.stream().map(PessoaMapper::toRequest).collect(Collectors.toList());
         }
         return new ArrayList<Pessoa>();
 
+    }
+
+    public static List<Pessoa> toRequestListSave(List<PessoaDTO> pessoa) {
+        return pessoa.stream().map(PessoaMapper::toRequest).collect(Collectors.toList());
     }
 }

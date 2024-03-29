@@ -4,6 +4,7 @@ import com.br.teste.attus.dto.EnderecoDTO;
 import com.br.teste.attus.dto.PessoaDTO;
 import com.br.teste.attus.service.EnderecoService;
 import com.br.teste.attus.service.PessoaService;
+import jakarta.persistence.PrePersist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,24 +30,13 @@ public class PessoaController {
         return ResponseEntity.ok(pessoas);
     }
 
-    @GetMapping("/buscar/{id}")
-    public ResponseEntity<PessoaDTO> buscaPessoaId(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(pessoaService.findById(id));
-    }
-
-    @GetMapping("/buscar/ids")
-    public ResponseEntity<List<PessoaDTO>> buscarEnderecosPorIds(@RequestParam List<Long> ids) {
+    @GetMapping("/buscar/id")
+    public ResponseEntity<List<PessoaDTO>> buscarPessoasPorId(@RequestParam List<Long> ids) {
         List<PessoaDTO> pessoas = pessoaService.findAllById(ids);
         return ResponseEntity.ok(pessoas);
     }
-
+    @PrePersist
     @PostMapping("/cadastrar")
-    public ResponseEntity<PessoaDTO> cadastrarPessoa(@RequestBody PessoaDTO cadastroPessoa) {
-        PessoaDTO response = pessoaService.save(cadastroPessoa);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
-
-    @PostMapping("/cadastrarPessoas")
     public ResponseEntity<List<PessoaDTO>> cadastrarPessoas(@RequestBody List<PessoaDTO> pessoasEnderecos) {
          List<PessoaDTO> response = pessoaService.saveLista(pessoasEnderecos);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);

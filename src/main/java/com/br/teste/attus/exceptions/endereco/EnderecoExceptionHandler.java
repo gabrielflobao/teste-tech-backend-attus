@@ -20,8 +20,8 @@ public class EnderecoExceptionHandler {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
-    @ExceptionHandler(EnderecoInexistenteException.class)
-    public ErrorDTO hander(EnderecoInexistenteException ex) {
+    @ExceptionHandler(EnderecoNotFoundException.class)
+    public ErrorDTO hander(EnderecoNotFoundException ex) {
         return new ErrorDTO(ex.getMessage(),ex.getLancamento());
 
     }
