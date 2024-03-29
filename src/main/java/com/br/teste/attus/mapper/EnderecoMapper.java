@@ -44,6 +44,7 @@ public class EnderecoMapper {
         entity.setCidade(object.getCidade());
         entity.setEstado(object.getEstado());
         entity.setTpPrincipal(object.getTpPrincipal());
+        entity.setPessoa(object.getPessoa());
         return entity;
     }
 

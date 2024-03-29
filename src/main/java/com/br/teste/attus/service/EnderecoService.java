@@ -53,10 +53,10 @@ public class EnderecoService {
     public List<EnderecoDTO> saveAll(List<EnderecoDTO> endereco) {
         List<Endereco> enderecosSalvar = new ArrayList<Endereco>();
         endereco.forEach(enderecoDTO -> {
-            Optional<Endereco> existePrincipal = repository.findEnderecoByTpPrincipalSim(enderecoDTO.getId());
-            if (existePrincipal.isPresent()) {
+            Optional<Endereco> existePrincipal = repository.findEnderecoByTpPrincipalSim(enderecoDTO.getPessoa().getId());
+            if (existePrincipal.isPresent() && enderecoDTO.getTpPrincipal().equals(TipoPrincipal.S)) {
                 throw new EnderecoPrincipalFoundException("Já existe endereço principal", "Existe endereço principal para esta pessoa :"
-                        + enderecoDTO.getPessoa().getNomeCompleto() + "\n" + "id:" + enderecoDTO.getPessoa().getId());
+                        + enderecoDTO.getPessoa().getNomeCompleto() + "id:" + enderecoDTO.getPessoa().getId());
             }
             enderecosSalvar.add(EnderecoMapper.toRequest(enderecoDTO));
         });
@@ -104,8 +104,7 @@ public class EnderecoService {
     }
 
     public EnderecoDTO defineEnderecoPrincipal(Long id) {
-
-        if (existEnderecoById(id)) {
+        if (repository.existsById(id)) {
             boolean existePrincipal = repository.existePrincipalEndereco(id);
             if (existePrincipal) {
                 throw new EnderecoPrincipalFoundException("Endereço principal existente", "Endereço definido como principal já existe");
@@ -138,7 +137,5 @@ public class EnderecoService {
         return EnderecoMapper.toReponseList(endereco);
     }
 
-    public boolean existEnderecoById(Long id) {
-        return repository.existsById(id);
-    }
+
 }
