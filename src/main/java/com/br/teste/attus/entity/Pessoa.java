@@ -32,7 +32,7 @@ public class Pessoa {
         this.enderecos = enderecos;
     }
 
-    @OneToMany(mappedBy = "pessoa",fetch = FetchType.EAGER , cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "pessoa",fetch = FetchType.LAZY , cascade = {CascadeType.ALL})
 
     private List<Endereco> enderecos;
 

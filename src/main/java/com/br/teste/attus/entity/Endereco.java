@@ -33,7 +33,7 @@ public class Endereco {
     @Column(name = "ESTADO")
     private EstadoBrasil estado;
 
-    @ManyToOne(fetch = FetchType.EAGER,targetEntity = Pessoa.class)
+    @ManyToOne(fetch = FetchType.LAZY,targetEntity = Pessoa.class)
     @JsonIgnore
     private Pessoa pessoa;
 

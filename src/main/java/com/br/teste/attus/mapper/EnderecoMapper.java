@@ -26,12 +26,9 @@ public class EnderecoMapper {
     }
 
     public static List<EnderecoDTO> toReponseList(List<Endereco> list) {
-        if(!list.isEmpty()){
-            return list.stream()
-                    .map(EnderecoMapper::toReponse)
-                    .collect(Collectors.toList());
-        }
-        return  new ArrayList<EnderecoDTO>();
+        return list.stream()
+                .map(EnderecoMapper::toReponse)
+                .collect(Collectors.toList());
     }
 
     public static Endereco toRequest(EnderecoDTO object) {
@@ -46,10 +43,8 @@ public class EnderecoMapper {
     }
 
     public static List<Endereco> toRequestList(List<EnderecoDTO> list) {
-       if(!list.isEmpty()) {
-           return list.stream().map(EnderecoMapper::toRequest).collect(Collectors.toList());
-       }
-        return new ArrayList<Endereco>();
+            return list.stream().map(EnderecoMapper::toRequest).collect(Collectors.toList());
+
 
     }
 
