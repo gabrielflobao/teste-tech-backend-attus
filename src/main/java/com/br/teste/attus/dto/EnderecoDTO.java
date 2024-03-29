@@ -8,7 +8,6 @@ import com.br.teste.attus.enuns.TipoPrincipal;
  */
 public class EnderecoDTO {
 
-    private Long id;
     private String logradouro;
 
     private String cep;
@@ -24,26 +23,17 @@ public class EnderecoDTO {
 
     }
 
-    public EnderecoDTO(Long id,
+    public EnderecoDTO(
                        String logradouro,
                        String cep, Integer numero
             , String cidade,
                        TipoPrincipal tpPrincipal, EstadoBrasil estado) {
-        this.id = id;
         this.logradouro = logradouro;
         this.cep = cep;
         this.numero = numero;
         this.cidade = cidade;
         this.tpPrincipal = tpPrincipal;
         this.estado = estado;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getLogradouro() {

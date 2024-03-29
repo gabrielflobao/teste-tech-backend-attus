@@ -1,7 +1,5 @@
 package com.br.teste.attus.service;
 
-import com.br.teste.attus.dto.PessoaEnderecoDTO;
-import com.br.teste.attus.exceptions.pessoa.PessoaExistenteException;
 import com.br.teste.attus.exceptions.pessoa.PessoaNotFoundException;
 import com.br.teste.attus.mapper.PessoaMapper;
 import com.br.teste.attus.repository.PessoaRepository;
@@ -23,35 +21,13 @@ public class PessoaService {
     @Autowired
     private PessoaRepository repository;
 
-    public PessoaDTO save(Pessoa pessoa) {
-        if (repository.existsById(pessoa.getId())) {
-            throw new PessoaExistenteException("Pessoa já existe!",
-                    "Pessoa com este id :" + pessoa.getId() + " já está cadastrada"
-            );
-        }
-
-        return PessoaMapper.toReponse(repository.save(pessoa));
-    }
-    public PessoaDTO save(PessoaEnderecoDTO pessoa) {
-        if (repository.existsById(pessoa.getId())) {
-            throw new PessoaExistenteException("Pessoa já existe!",
-                    "Pessoa com este id :" + pessoa.getId() + " já está cadastrada"
-            );
-        }
-        return PessoaMapper.toReponse(repository.save(PessoaMapper.toRequest(pessoa)));
+    public PessoaDTO save(PessoaDTO pessoa) {
+        Pessoa pessoas = PessoaMapper.toRequest(pessoa);
+        return PessoaMapper.toReponse(repository.save(pessoas));
     }
 
-    public List<PessoaDTO> saveLista(List<PessoaEnderecoDTO>  pessoa) {
-        List<PessoaDTO> response = new ArrayList<>();
-        pessoa.forEach(pessoasDTO -> {
-            if (existsPessoaById(pessoasDTO.getId())) {
-                throw new PessoaExistenteException("Pessoa já existe!",
-                        "Pessoa com este id :" + pessoasDTO.getId() + " já está cadastrada"
-                );
-            }
-            response.add(save(PessoaMapper.toRequest(pessoasDTO)));
-        });
-        return response;
+    public List<PessoaDTO> saveLista(List<PessoaDTO>  pessoa) {
+        return PessoaMapper.toReponseList(repository.saveAll(PessoaMapper.toRequestList(pessoa)));
     }
 
     public List<PessoaDTO> findAll() {

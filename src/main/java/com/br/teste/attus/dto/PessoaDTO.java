@@ -10,23 +10,19 @@ import java.util.List;
  */
 public class PessoaDTO {
 
-    private Long id;
-
     private String nomeCompleto;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private Date dataNascimento;
 
     private List<EnderecoDTO> enderecos;
 
-    public PessoaDTO(Long id, String nomeCompleto, Date dataNascimento) {
-        this.id = id;
+    public PessoaDTO(String nomeCompleto, Date dataNascimento) {
+
         this.nomeCompleto = nomeCompleto;
         this.dataNascimento = dataNascimento;
 
     }
-
-    public PessoaDTO(Long id, String nomeCompleto, Date dataNascimento,List<EnderecoDTO> enderecos) {
-        this.id = id;
+    public PessoaDTO(String nomeCompleto, Date dataNascimento,List<EnderecoDTO> enderecos) {
         this.nomeCompleto = nomeCompleto;
         this.dataNascimento = dataNascimento;
         this.enderecos = enderecos;
@@ -36,13 +32,7 @@ public class PessoaDTO {
     public PessoaDTO() {
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getNomeCompleto() {
         return nomeCompleto;

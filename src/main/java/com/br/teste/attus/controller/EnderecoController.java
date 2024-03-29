@@ -3,6 +3,7 @@ package com.br.teste.attus.controller;
 import com.br.teste.attus.dto.EnderecoDTO;
 import com.br.teste.attus.entity.Endereco;
 import com.br.teste.attus.service.EnderecoService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ public class EnderecoController {
     @Autowired
     private EnderecoService service;
 
+    @Operation(summary = "Realiza a listagem de enderecos",method = "GET")
     @GetMapping("/listar")
     public ResponseEntity<List<EnderecoDTO>> listaEnderecos() {
         List<EnderecoDTO> enderecos = service.findAll();

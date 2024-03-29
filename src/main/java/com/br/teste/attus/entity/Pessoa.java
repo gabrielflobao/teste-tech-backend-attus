@@ -2,6 +2,7 @@ package com.br.teste.attus.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Date;
 import java.util.List;
@@ -13,16 +14,28 @@ import java.util.Objects;
 @Table(name = "TB_PESSOA")
 public class Pessoa {
     @Id
-    @Column(name = "ID_PESSOA")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "NM_PESSOA")
     private String nomeCompleto;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @JsonFormat(pattern = "dd/MM/yyyy")
     @Column(name = "DT_NASCI")
     private Date dataNascimento;
+    public Pessoa() {
+
+    }
+
+    public Pessoa(String nomeCompleto, Date dataNascimento, List<Endereco> enderecos) {
+        this.nomeCompleto = nomeCompleto;
+        this.dataNascimento = dataNascimento;
+        this.enderecos = enderecos;
+    }
+
     @OneToMany(mappedBy = "pessoa",fetch = FetchType.EAGER , cascade = {CascadeType.ALL})
+
     private List<Endereco> enderecos;
+
 
     public Long getId() {
         return id;

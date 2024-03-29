@@ -16,7 +16,6 @@ public class EnderecoMapper {
 
     public static EnderecoDTO toReponse(Endereco object) {
         EnderecoDTO dto = new EnderecoDTO();
-        dto.setId(object.getId());
         dto.setLogradouro(object.getLogradouro());
         dto.setCep(object.getCep());
         dto.setNumero(object.getNumero());

@@ -29,11 +29,6 @@ public class EnderecoService {
     PessoaRepository pessoaRepository;
 
     public EnderecoDTO save(EnderecoDTO endereco) {
-        if (repository.existsById(endereco.getId())) {
-            throw new EnderecoExistenteException("Endereco já existente!",
-                    "Endereco com este id :" + endereco.getId() + " já está cadastrado"
-            );
-        }
         Endereco entity = EnderecoMapper.toRequest(endereco);
         return EnderecoMapper.toReponse(repository.save(entity));
 

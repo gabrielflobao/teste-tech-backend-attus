@@ -2,6 +2,7 @@ package com.br.teste.attus.entity;
 
 import com.br.teste.attus.enuns.EstadoBrasil;
 import com.br.teste.attus.enuns.TipoPrincipal;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 /**
@@ -33,8 +34,21 @@ public class Endereco {
     private EstadoBrasil estado;
 
     @ManyToOne(fetch = FetchType.EAGER,targetEntity = Pessoa.class)
-   @JoinColumn(name = "ID_PESSOA" ,referencedColumnName  = "ID_PESSOA")
+    @JsonIgnore
     private Pessoa pessoa;
+
+    public Endereco() {
+
+    }
+    public Endereco(String logradouro, String cep, Integer numero, String cidade,  EstadoBrasil estado, TipoPrincipal tpPrincipal, Pessoa pessoa) {
+        this.logradouro = logradouro;
+        this.cep = cep;
+        this.numero = numero;
+        this.cidade = cidade;
+        this.tpPrincipal = tpPrincipal;
+        this.estado = estado;
+        this.pessoa = pessoa;
+    }
 
 
 
