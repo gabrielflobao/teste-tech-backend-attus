@@ -35,22 +35,25 @@ public class PessoaMapper {
         entity.setId(object.getId());
         entity.setNomeCompleto(object.getNomeCompleto());
         entity.setDataNascimento(object.getDataNascimento());
-        entity.setEnderecos(EnderecoMapper.toRequestListSave(object.getEnderecos(),entity));
+        if (object.getEnderecos() != null) {
+            entity.setEnderecos(EnderecoMapper.toRequestListSave(object.getEnderecos(), entity));
+        }
         return entity;
 
     }
+
     public static Pessoa toRequestSave(PessoaDTO object) {
         Pessoa entity = new Pessoa();
         entity.setId(object.getId());
         entity.setNomeCompleto(object.getNomeCompleto());
         entity.setDataNascimento(object.getDataNascimento());
-        entity.setEnderecos(EnderecoMapper.toRequestListSave(object.getEnderecos(),entity));
+        entity.setEnderecos(EnderecoMapper.toRequestListSave(object.getEnderecos(), entity));
         return entity;
 
     }
 
     public static List<Pessoa> toRequestList(List<PessoaDTO> list) {
-        if(!list.isEmpty()) {
+        if (!list.isEmpty()) {
             return list.stream().map(PessoaMapper::toRequest).collect(Collectors.toList());
         }
         return new ArrayList<Pessoa>();

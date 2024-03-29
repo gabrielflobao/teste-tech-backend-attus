@@ -18,13 +18,13 @@ public class EnderecoController {
     @Autowired
     private EnderecoService service;
 
-    @Operation(summary = "Realiza a listagem de endereços.",method = "GET")
+    @Operation(summary = "Realiza a listagem de endereço(s).",method = "GET")
     @GetMapping("/listar")
     public ResponseEntity<List<EnderecoDTO>> listaEnderecos() {
         List<EnderecoDTO> enderecos = service.findAll();
         return ResponseEntity.ok(enderecos);
     }
-    @Operation(summary = "Busca endereço pelo ID.",method = "GET")
+    @Operation(summary = "Busca endereço pelo ID(s).",method = "GET")
     @GetMapping("/buscar/{id}")
     public ResponseEntity<EnderecoDTO> buscaEnderecoId(@PathVariable("id") Long id) {
         EnderecoDTO endereco = service.findById(id);
@@ -37,7 +37,7 @@ public class EnderecoController {
         return endereco;
     }
 
-    @Operation(summary = "Busca endereços pelos IDs" +
+    @Operation(summary = "Busca endereços pelos ID(s)" +
             ".",method = "GET")
     @GetMapping("/buscarEnderecos")
     public ResponseEntity<List<EnderecoDTO>> buscarEnderecosPorIds(@RequestParam List<Long> ids) {
@@ -45,25 +45,20 @@ public class EnderecoController {
         return ResponseEntity.ok(enderecos);
     }
 
-
-    @PostMapping("/cadastrar")
-    public ResponseEntity cadastrarEnderecos(@RequestBody List<EnderecoDTO> cadastroEnderecos) {
-        cadastroEnderecos.forEach(enderecoDTO -> service.save(enderecoDTO));
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    @Operation(summary = "Cadastrar endereços por meio do ID pessoa" +
+            ".",method = "PUT")
+    @PutMapping("/cadastrar/pessoa/{id}")
+    public ResponseEntity<List<EnderecoDTO>> cadastrarEnderecos(@PathVariable("id") Long id,@RequestBody List<EnderecoDTO> cadastroEnderecos) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.saveAllByIdPessoa(id,cadastroEnderecos));
     }
-
+    @Operation(summary = "Define endereço principal" +
+            ".",method = "PUT")
     @PutMapping(value = "/principal/{id}")
     public ResponseEntity<EnderecoDTO> definirEnderecoPrincipal(@PathVariable("id") Long id) {
         return ResponseEntity.ok(service.defineEnderecoPrincipal(id));
 
     }
 
-    @PutMapping(value = "/cadastrar/pessoa/{id}")
-    public ResponseEntity<EnderecoDTO> cadastrarEnderecoPessoa(@PathVariable("id") Long id,@RequestBody List<EnderecoDTO> cadastroEnderecos) {
-        cadastroEnderecos.forEach(enderecoDTO -> service.save(enderecoDTO));
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-
-    }
 
 
 }

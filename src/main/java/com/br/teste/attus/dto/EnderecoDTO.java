@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 public class EnderecoDTO {
 
+    private Long id;
     private String logradouro;
 
     private String cep;
@@ -26,11 +27,12 @@ public class EnderecoDTO {
 
     }
 
-    public EnderecoDTO(
+    public EnderecoDTO(Long id,
                        String logradouro,
                        String cep, Integer numero
             , String cidade,
                        TipoPrincipal tpPrincipal, EstadoBrasil estado,Pessoa pessoa) {
+        this.id = id;
         this.logradouro = logradouro;
         this.cep = cep;
         this.numero = numero;
@@ -94,5 +96,13 @@ public class EnderecoDTO {
 
     public void setPessoa(Pessoa pessoa) {
         this.pessoa = pessoa;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

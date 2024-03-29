@@ -28,16 +28,16 @@ public class EnderecoExceptionHandler {
 
     @ResponseStatus(HttpStatus.FOUND)
     @ResponseBody
-    @ExceptionHandler(EnderecoPrincipalExisteException.class)
-    public ErrorDTO hander(EnderecoPrincipalExisteException ex) {
+    @ExceptionHandler(EnderecoPrincipalFoundException.class)
+    public ErrorDTO hander(EnderecoPrincipalFoundException ex) {
         return new ErrorDTO(ex.getMessage(),ex.getLancamento());
 
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
-    @ExceptionHandler(EnderecoPrincipalInexistente.class)
-    public ErrorDTO hander(EnderecoPrincipalInexistente ex) {
+    @ExceptionHandler(EnderecoPrincipalNotFound.class)
+    public ErrorDTO hander(EnderecoPrincipalNotFound ex) {
         return new ErrorDTO(ex.getMessage(),ex.getLancamento());
 
     }

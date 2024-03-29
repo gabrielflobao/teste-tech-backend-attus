@@ -19,12 +19,14 @@ public interface EnderecoRepository extends JpaRepository<Endereco,Long> {
 
     List<Endereco> findByPessoaId(Long id);
 
-    @Query("SELECT DECODE(t.tpPrincipal,'S',TRUE,FALSE) FROM Endereco t where t.id= :param  ")
+    @Query("SELECT DECODE(t.tpPrincipal,'S',TRUE,FALSE) FROM Endereco t where t.pessoa.id= :param  ")
     boolean existePrincipalEndereco(@Param("param") Long id);
-    @Query("SELECT t FROM Endereco t where t.id = :id and t.tpPrincipal = :sn")
+    @Query("SELECT t FROM Endereco t where t.pessoa.id = :id and t.tpPrincipal = :sn")
     Optional<Endereco> findPrincipalEndereco(@Param("id") Long id,@Param("sn") TipoPrincipal sn);
 
-    @Query("SELECT TRUE FROM Endereco t where t.pessoa.id = :id and t.tpPrincipal = 'S'")
-    boolean existsEnderecoByTpPrincipalSim(@Param("id") Long id);
+    @Query("SELECT t FROM Endereco t where t.pessoa.id = :id and t.tpPrincipal = 'S' ")
+    Optional<Endereco> findEnderecoByTpPrincipalSim(@Param("id") Long id);
+
     List<Endereco> findEnderecoByPessoaId(Long id);
+
 }

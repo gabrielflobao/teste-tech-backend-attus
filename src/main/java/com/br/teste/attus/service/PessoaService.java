@@ -43,7 +43,7 @@ public class PessoaService {
         Optional<Pessoa> entity = repository.findById(id);
         if (entity.isEmpty()) {
             throw new PessoaNotFoundException("Nenhuma pessoa encontrada!",
-                    "Não esta pessoa cadastrada");
+                    "Não consta nenhuma pessoa com o ID informado");
         }
         return PessoaMapper.toReponse(entity.get());
 
@@ -59,7 +59,6 @@ public class PessoaService {
     }
 
     public boolean existsPessoaById(Long id) {
-
         return repository.existsById(id);
 
     }

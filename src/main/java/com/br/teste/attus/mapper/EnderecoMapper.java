@@ -23,13 +23,17 @@ public class EnderecoMapper {
         dto.setCidade(object.getCidade());
         dto.setTpPrincipal(object.getTpPrincipal());
         dto.setEstado(object.getEstado());
+        dto.setId(object.getId());
         return dto;
     }
 
     public static List<EnderecoDTO> toReponseList(List<Endereco> list) {
-        return list.stream()
-                .map(EnderecoMapper::toReponse)
-                .collect(Collectors.toList());
+        if (list != null) {
+            return list.stream()
+                    .map(EnderecoMapper::toReponse)
+                    .collect(Collectors.toList());
+        }
+        return null;
     }
 
     public static Endereco toRequest(EnderecoDTO object) {
@@ -44,24 +48,27 @@ public class EnderecoMapper {
     }
 
     public static List<Endereco> toRequestList(List<EnderecoDTO> list) {
-            return list.stream().map(EnderecoMapper::toRequest).collect(Collectors.toList());
+        return list.stream().map(EnderecoMapper::toRequest).collect(Collectors.toList());
 
 
     }
 
     public static List<Endereco> toRequestListSave(List<EnderecoDTO> enderecos, Pessoa pessoa) {
-        List<Endereco> entities = new ArrayList<>();
-        for (EnderecoDTO enderecoDTO : enderecos) {
-            Endereco entity = new Endereco();
-            entity.setLogradouro(enderecoDTO.getLogradouro());
-            entity.setCep(enderecoDTO.getCep());
-            entity.setNumero(enderecoDTO.getNumero());
-            entity.setCidade(enderecoDTO.getCidade());
-            entity.setEstado(enderecoDTO.getEstado());
-            entity.setTpPrincipal(enderecoDTO.getTpPrincipal());
-            entity.setPessoa(pessoa);
-            entities.add(entity);
+        if (enderecos != null) {
+            List<Endereco> entities = new ArrayList<>();
+            for (EnderecoDTO enderecoDTO : enderecos) {
+                Endereco entity = new Endereco();
+                entity.setLogradouro(enderecoDTO.getLogradouro());
+                entity.setCep(enderecoDTO.getCep());
+                entity.setNumero(enderecoDTO.getNumero());
+                entity.setCidade(enderecoDTO.getCidade());
+                entity.setEstado(enderecoDTO.getEstado());
+                entity.setTpPrincipal(enderecoDTO.getTpPrincipal());
+                entity.setPessoa(pessoa);
+                entities.add(entity);
+            }
+            return entities;
         }
-        return entities;
+        return null;
     }
 }
