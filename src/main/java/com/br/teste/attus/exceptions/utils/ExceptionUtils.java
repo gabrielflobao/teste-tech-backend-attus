@@ -9,13 +9,13 @@ import java.util.Optional;
 public class ExceptionUtils {
     public static void checkListEmptyExceptionWithMsg(List<?> empty, AbstractException ex) {
         if (empty.isEmpty()) {
-            throw new EnderecoNotFoundException(ex.getMessage(), ex.getLancamento());
+            throw ex;
         }
     }
 
     public static void checkOptionalEmptyExceptionWithMsg(Optional op, AbstractException ex) {
         if (op.isEmpty()) {
-            throw new EnderecoNotFoundException(ex.getMessage(), ex.getLancamento());
+            throw ex;
         }
     }
 }

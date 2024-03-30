@@ -1,6 +1,7 @@
 package com.br.teste.attus.service;
 
 import com.br.teste.attus.dto.EnderecoDTO;
+import com.br.teste.attus.entity.Endereco;
 import com.br.teste.attus.entity.Pessoa;
 import com.br.teste.attus.enuns.TipoPrincipal;
 import com.br.teste.attus.exceptions.endereco.EnderecoExistenteException;
@@ -10,7 +11,6 @@ import com.br.teste.attus.exceptions.endereco.EnderecoPrincipalNotFound;
 import com.br.teste.attus.exceptions.pessoa.PessoaNotFoundException;
 import com.br.teste.attus.exceptions.utils.ExceptionUtils;
 import com.br.teste.attus.mapper.EnderecoMapper;
-import com.br.teste.attus.entity.Endereco;
 import com.br.teste.attus.repository.EnderecoRepository;
 import com.br.teste.attus.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
@@ -60,49 +61,56 @@ public class EnderecoService {
     }
 
     public List<EnderecoDTO> findAll() {
-        List<Endereco> list = repository.findAll();
-        ExceptionUtils.checkListEmptyExceptionWithMsg(list, new EnderecoNotFoundException("Não existe endereços",
-                "Não existe endereços cadastrados"));
+        List<Endereco> list = Optional.of(repository.findAll())
+                .orElseThrow(()->new EnderecoNotFoundException("Não existe endereços",
+                        "Não existe endereços cadastrados"));
+
         return EnderecoMapper.toReponseList(list);
     }
 
     public EnderecoDTO findById(Long id) {
-        Optional<Endereco> entity = repository.findById(id);
-        if (entity.isEmpty()) {
-            throw new EnderecoExistenteException("Endereço não existe", "Código do endereço informado não existe");
-        }
-        return EnderecoMapper.toReponse(entity.get());
+        Endereco entity = repository.findById(id)
+                .orElseThrow(()->new EnderecoExistenteException("Endereço não existe", "Código do endereço informado não existe"));
+        return EnderecoMapper.toReponse(entity);
     }
 
     public List<EnderecoDTO> findAllById(List<Long> id) {
-        List<Endereco> entitys = repository.findAllById(id);
-        ExceptionUtils.checkListEmptyExceptionWithMsg(entitys, new EnderecoNotFoundException("Endereço não encontrado",
-                "Endereço referente ao id mencionado não foi encontrado"));
+        List<Endereco> entitys = Optional.of(repository.findAllById(id))
+                .orElseThrow(()-> new EnderecoNotFoundException("Endereço não encontrado",
+                        "Endereço referente ao id mencionado não foi encontrado"));
         return EnderecoMapper.toReponseList(entitys);
     }
 
     public List<EnderecoDTO> findByPessoaId(Long id) {
-        List<Endereco> lista = repository.findByPessoaId(id);
-        ExceptionUtils.checkListEmptyExceptionWithMsg(lista, new EnderecoNotFoundException("Endereço não encontrado",
-                "Endereço não encontrado referente ao ID pessoa informado"));
-        return EnderecoMapper.toReponseList(repository.findByPessoaId(id));
+        List<Endereco> lista = Optional.of(repository.findByPessoaId(id))
+                .orElseThrow(() -> new EnderecoNotFoundException("Endereço não encontrado",
+                        "Endereço não encontrado referente ao ID pessoa informado"));
+        return EnderecoMapper.toReponseList(lista);
     }
 
     public EnderecoDTO defineEnderecoPrincipal(Long id) {
-        if (repository.existsById(id)) {
-            boolean existePrincipal = repository.existePrincipalEndereco(id);
-            if (existePrincipal) {
-                throw new EnderecoPrincipalFoundException("Endereço principal existente", "Endereço definido como principal já existe");
-            }
-        } else {
-            throw new EnderecoNotFoundException("Não existe endereço para o ID informado", "Não existe endereço conforme o ID informado");
-        }
+        AtomicReference<Endereco> enderecoRef = new AtomicReference<>();
+        Optional<Endereco> opEndereco = repository.findById(id);
 
-        Endereco endereco = repository.findById(id).get();
-        endereco.setTpPrincipal(TipoPrincipal.S);
-        return EnderecoMapper.toReponse(repository.save(endereco));
-
+        opEndereco.ifPresentOrElse(
+                endereco -> {
+                    enderecoRef.set(endereco);
+                    Optional<Endereco> opEnderecoPrincipal = repository.findEnderecoByTpPrincipalSim(id);
+                    if (opEnderecoPrincipal.isPresent()) {
+                        throw new EnderecoPrincipalFoundException("Endereço principal existente", "Endereço definido como principal já existe");
+                    } else {
+                        endereco.setTpPrincipal(TipoPrincipal.S);
+                        repository.save(endereco);
+                    }
+                },
+                () -> {
+                    throw new EnderecoNotFoundException("Não existe endereço para o ID informado", "Não existe endereço conforme o ID informado");
+                }
+        );
+        Endereco endereco = enderecoRef.get();
+        return EnderecoMapper.toReponse(endereco);
     }
+
 
     public EnderecoDTO updateEnderecoPrincipalToN(Long id) {
         Optional<Endereco> endereco = repository.findPrincipalEndereco(id, TipoPrincipal.S);

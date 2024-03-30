@@ -36,24 +36,24 @@ public class PessoaService {
     }
 
     public List<PessoaDTO> findAll() {
-        List<Pessoa> list = repository.findAll();
-        ExceptionUtils.checkListEmptyExceptionWithMsg(list, new PessoaNotFoundException("Nenhuma pessoa encontrada!",
-                "Não há pessoas cadastradas no sistema"));
+        List<Pessoa> list = Optional.of(repository.findAll())
+                .orElseThrow(() -> new PessoaNotFoundException("Nenhuma pessoa encontrada!",
+                        "Não há pessoas cadastradas no sistema"));
         return PessoaMapper.toReponseList(list);
     }
 
     public PessoaDTO findById(Long id) {
-        Optional<Pessoa> entity = repository.findById(id);
-        ExceptionUtils.checkOptionalEmptyExceptionWithMsg(entity, new PessoaNotFoundException("Nenhuma pessoa encontrada!",
+       Pessoa entity = repository.findById(id)
+               .orElseThrow(()->  new PessoaNotFoundException("Nenhuma pessoa encontrada!",
                 "Não consta nenhuma pessoa com o ID informado"));
-        return PessoaMapper.toReponse(entity.get());
+        return PessoaMapper.toReponse(entity);
 
     }
 
     public List<PessoaDTO> findAllById(List<Long> id) {
-        List<Pessoa> entitys = repository.findAllById(id);
-        ExceptionUtils.checkListEmptyExceptionWithMsg(entitys, new PessoaNotFoundException("Nenhuma pessoa encontrada!",
-                "Não há pessoas cadastradas no sistema"));
+        List<Pessoa> entitys = Optional.of(repository.findAllById(id))
+                .orElseThrow(() -> new PessoaNotFoundException("Nenhuma pessoa encontrada!",
+                        "Não há pessoas cadastradas no sistema"));
         return PessoaMapper.toReponseList(entitys);
     }
 
@@ -78,6 +78,7 @@ public class PessoaService {
         return pessoaDTOS.stream()
                 .map(PessoaDTO::getId)
                 .collect(Collectors.toList());
+
     }
 
     private List<Pessoa> buscarPessoasPorIds(List<Long> pessoasIds) {
@@ -108,14 +109,4 @@ public class PessoaService {
     private List<EnderecoDTO> mapearEnderecosParaDTO(List<Endereco> enderecos) {
         return EnderecoMapper.toReponseList(enderecos);
     }
-
-
-
-
-
-
-
-
-
-
 }
