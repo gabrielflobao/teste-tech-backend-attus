@@ -72,4 +72,20 @@ public class EnderecoMapper {
         }
         return null;
     }
+
+    public static Endereco toRequestUpdate(EnderecoDTO object) {
+        Endereco entity = new Endereco();
+        entity.setLogradouro(object.getLogradouro());
+        entity.setCep(object.getCep());
+        entity.setNumero(object.getNumero());
+        entity.setCidade(object.getCidade());
+        entity.setEstado(object.getEstado());
+        entity.setTpPrincipal(object.getTpPrincipal());
+        entity.setPessoa(object.getPessoa());
+        entity.setId(object.getId());
+        return entity;
+    }
+
+
+
 }

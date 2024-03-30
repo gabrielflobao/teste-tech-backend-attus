@@ -26,7 +26,6 @@ public enum TipoPrincipal {
         return id;
     }
 
-    @Column(name = "descricao")
     private String descricao;
 
 
