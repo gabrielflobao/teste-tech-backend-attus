@@ -1,4 +1,7 @@
 package com.br.teste.attus.dto;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 /**
  * Author : Gabriel F F Lobão
  */
@@ -29,5 +32,10 @@ public class ErrorDTO {
 
     public void setLancamento(String lancamento) {
         this.lancamento = lancamento;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(obj,this);
     }
 }

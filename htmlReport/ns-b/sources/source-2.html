@@ -1,0 +1,218 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > PessoaService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.br.teste.attus.service</a>
+</div>
+
+<h1>Coverage Summary for Class: PessoaService (com.br.teste.attus.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PessoaService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    37,5%
+  </span>
+  <span class="absValue">
+    (6/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    33,3%
+  </span>
+  <span class="absValue">
+    (12/36)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.br.teste.attus.service;
+&nbsp;
+&nbsp;import com.br.teste.attus.dto.EnderecoDTO;
+&nbsp;import com.br.teste.attus.entity.Endereco;
+&nbsp;import com.br.teste.attus.exceptions.pessoa.PessoaNotFoundException;
+&nbsp;import com.br.teste.attus.exceptions.utils.ExceptionUtils;
+&nbsp;import com.br.teste.attus.mapper.EnderecoMapper;
+&nbsp;import com.br.teste.attus.mapper.PessoaMapper;
+&nbsp;import com.br.teste.attus.repository.PessoaRepository;
+&nbsp;import com.br.teste.attus.dto.PessoaDTO;
+&nbsp;import com.br.teste.attus.entity.Pessoa;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Objects;
+&nbsp;import java.util.Optional;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;/**
+&nbsp; * Author : Gabriel F F Lobão
+&nbsp; */
+&nbsp;@Service
+<b class="fc">&nbsp;public class PessoaService {</b>
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private PessoaRepository repository;
+&nbsp;
+&nbsp;    public PessoaDTO save(PessoaDTO pessoa) {
+<b class="fc">&nbsp;        Pessoa pessoas = PessoaMapper.toRequest(pessoa);</b>
+<b class="fc">&nbsp;        return PessoaMapper.toReponse(repository.save(pessoas));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;PessoaDTO&gt; saveLista(List&lt;PessoaDTO&gt;  pessoa) {
+<b class="fc">&nbsp;        return PessoaMapper.toReponseList(repository.saveAll(PessoaMapper.toRequestListSave(pessoa)));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;PessoaDTO&gt; findAll() {
+<b class="fc">&nbsp;        List&lt;Pessoa&gt; list = repository.findAll();</b>
+<b class="fc">&nbsp;        ExceptionUtils.checkListEmptyExceptionWithMsg(list,new PessoaNotFoundException(&quot;Nenhuma pessoa encontrada!&quot;,</b>
+&nbsp;                &quot;Não há pessoas cadastradas no sistema&quot;));
+<b class="fc">&nbsp;        return PessoaMapper.toReponseList(list);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public PessoaDTO findById(Long id) {
+<b class="fc">&nbsp;       Pessoa entity = repository.findById(id)</b>
+<b class="fc">&nbsp;               .orElseThrow(()-&gt;  new PessoaNotFoundException(&quot;Nenhuma pessoa encontrada!&quot;,</b>
+&nbsp;                &quot;Não consta nenhuma pessoa com o ID informado&quot;));
+<b class="nc">&nbsp;        return PessoaMapper.toReponse(entity);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;PessoaDTO&gt; findAllById(List&lt;Long&gt; id) {
+<b class="fc">&nbsp;        List&lt;Pessoa&gt; entitys = repository.findAllById(id);</b>
+<b class="fc">&nbsp;        ExceptionUtils.checkListEmptyExceptionWithMsg(entitys, new PessoaNotFoundException(&quot;Nenhuma pessoa encontrada!&quot;,</b>
+&nbsp;                &quot;Não há pessoas cadastradas no sistema&quot;));
+<b class="fc">&nbsp;        return PessoaMapper.toReponseList(entitys);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean existsPessoaById(Long id) {
+<b class="nc">&nbsp;        return repository.existsById(id);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;PessoaDTO&gt; updatePessoas(List&lt;PessoaDTO&gt; pessoaDTOS) {
+<b class="nc">&nbsp;        List&lt;Long&gt; idsDasPessoasDTOS = extrairIdsDasPessoas(pessoaDTOS);</b>
+<b class="nc">&nbsp;        List&lt;Pessoa&gt; pessoasDoBanco = buscarPessoasPorIds(idsDasPessoasDTOS);</b>
+<b class="nc">&nbsp;        List&lt;Pessoa&gt; pessoasAtualizadas = atualizarPessoas(pessoasDoBanco, pessoaDTOS);</b>
+<b class="nc">&nbsp;        savePessoasNoBanco(pessoasAtualizadas);</b>
+<b class="nc">&nbsp;        ExceptionUtils.checkListEmptyExceptionWithMsg(pessoasAtualizadas, new PessoaNotFoundException(&quot;Nenhuma pessoa encontrada!&quot;,</b>
+&nbsp;                &quot;Não foram encontradas as pessoas para atualização&quot;));
+<b class="nc">&nbsp;        return mapearPesssoasParaDTO(pessoasAtualizadas);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private List&lt;PessoaDTO&gt; mapearPesssoasParaDTO(List&lt;Pessoa&gt; pessoasAtualizadas) {
+<b class="nc">&nbsp;        return PessoaMapper.toReponseList(pessoasAtualizadas);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private List&lt;Long&gt; extrairIdsDasPessoas(List&lt;PessoaDTO&gt; pessoaDTOS) {
+<b class="nc">&nbsp;        return pessoaDTOS.stream()</b>
+<b class="nc">&nbsp;                .map(PessoaDTO::getId)</b>
+<b class="nc">&nbsp;                .collect(Collectors.toList());</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    private List&lt;Pessoa&gt; buscarPessoasPorIds(List&lt;Long&gt; pessoasIds) {
+<b class="nc">&nbsp;        return repository.findAllById(pessoasIds);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private List&lt;Pessoa&gt; atualizarPessoas(List&lt;Pessoa&gt; pessoasBanco, List&lt;PessoaDTO&gt; pessoaDTOS) {
+<b class="nc">&nbsp;        return pessoasBanco.stream()</b>
+<b class="nc">&nbsp;                .peek(pessoaBanco -&gt; atualizaPessoa(pessoaBanco, pessoaDTOS))</b>
+<b class="nc">&nbsp;                .collect(Collectors.toList());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void savePessoasNoBanco(List&lt;Pessoa&gt; pessoas) {
+<b class="nc">&nbsp;        repository.saveAll(pessoas);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void atualizaPessoa(Pessoa pessoaBanco, List&lt;PessoaDTO&gt; pessoaDTOS) {
+<b class="nc">&nbsp;        pessoaDTOS.stream()</b>
+<b class="nc">&nbsp;                .filter(pessoaDTO -&gt; Objects.equals(pessoaDTO.getId(), pessoaBanco.getId()))</b>
+<b class="nc">&nbsp;                .findFirst()</b>
+<b class="nc">&nbsp;                .ifPresent(pessoaDTO -&gt; {</b>
+<b class="nc">&nbsp;                    pessoaBanco.setNomeCompleto(Objects.requireNonNullElse(pessoaDTO.getNomeCompleto(), pessoaDTO.getNomeCompleto()));</b>
+<b class="nc">&nbsp;                    pessoaBanco.setDataNascimento(Objects.requireNonNullElse(pessoaDTO.getDataNascimento(), pessoaDTO.getDataNascimento()));</b>
+&nbsp;
+&nbsp;                });
+&nbsp;    }
+&nbsp;
+&nbsp;    private List&lt;EnderecoDTO&gt; mapearEnderecosParaDTO(List&lt;Endereco&gt; enderecos) {
+<b class="nc">&nbsp;        return EnderecoMapper.toReponseList(enderecos);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-04-01 18:52</div>
+</div>
+</body>
+</html>

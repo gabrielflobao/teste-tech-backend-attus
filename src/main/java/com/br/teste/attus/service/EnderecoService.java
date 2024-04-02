@@ -1,6 +1,7 @@
 package com.br.teste.attus.service;
 
 import com.br.teste.attus.dto.EnderecoDTO;
+import com.br.teste.attus.dto.EnderecoSaveDTO;
 import com.br.teste.attus.entity.Endereco;
 import com.br.teste.attus.entity.Pessoa;
 import com.br.teste.attus.enuns.TipoPrincipal;
@@ -11,6 +12,7 @@ import com.br.teste.attus.exceptions.endereco.EnderecoPrincipalNotFound;
 import com.br.teste.attus.exceptions.pessoa.PessoaNotFoundException;
 import com.br.teste.attus.exceptions.utils.ExceptionUtils;
 import com.br.teste.attus.mapper.EnderecoMapper;
+import com.br.teste.attus.mapper.EnderecoSaveMapper;
 import com.br.teste.attus.repository.EnderecoRepository;
 import com.br.teste.attus.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,16 +40,16 @@ public class EnderecoService {
     @Autowired
     private PessoaService pessoaService;
 
-    public List<EnderecoDTO> saveAllByIdPessoa(Long idPessoa, List<EnderecoDTO> endereco) {
-       return getResponseSaveEnderecosByIdPessoa(idPessoa,endereco);
+    public List<EnderecoDTO> saveAllByIdPessoa(Long idPessoa, List<EnderecoSaveDTO> endereco) {
+        return getResponseSaveEnderecosByIdPessoa(idPessoa, endereco);
 
     }
 
-    public List<EnderecoDTO> saveAll(List<EnderecoDTO> endereco) {
+    public List<EnderecoDTO> saveAll(List<EnderecoSaveDTO> endereco, Pessoa pessoa) {
         List<Endereco> enderecosSalvar = new ArrayList<Endereco>();
         endereco.forEach(enderecoDTO -> {
-            validateExistingPrincipal(enderecoDTO, repository);
-            enderecosSalvar.add(EnderecoMapper.toRequest(enderecoDTO));
+            validateExistingPrincipal(enderecoDTO, repository, pessoa);
+            enderecosSalvar.add(EnderecoSaveMapper.toRequest(enderecoDTO, pessoa));
         });
         ExceptionUtils.checkListEmptyExceptionWithMsg(enderecosSalvar, new EnderecoNotFoundException("Não há endereços para salvar",
                 "Não existem endereços para salvar"));
@@ -61,30 +63,31 @@ public class EnderecoService {
     }
 
     public List<EnderecoDTO> findAll() {
-        List<Endereco> list = Optional.of(repository.findAll())
-                .orElseThrow(()->new EnderecoNotFoundException("Não existe endereços",
-                        "Não existe endereços cadastrados"));
-
+        List<Endereco> list = repository.findAll();
+        ExceptionUtils.checkListEmptyExceptionWithMsg(list, new EnderecoNotFoundException("Não existe endereços",
+                "Não existe endereços cadastrados"));
         return EnderecoMapper.toReponseList(list);
     }
 
     public EnderecoDTO findById(Long id) {
         Endereco entity = repository.findById(id)
-                .orElseThrow(()->new EnderecoExistenteException("Endereço não existe", "Código do endereço informado não existe"));
+                .orElseThrow(() -> new EnderecoNotFoundException("Endereço não existe", "Código do endereço informado não existe"));
         return EnderecoMapper.toReponse(entity);
     }
 
     public List<EnderecoDTO> findAllById(List<Long> id) {
-        List<Endereco> entitys = Optional.of(repository.findAllById(id))
-                .orElseThrow(()-> new EnderecoNotFoundException("Endereço não encontrado",
-                        "Endereço referente ao id mencionado não foi encontrado"));
+        List<Endereco> entitys = repository.findAllById(id);
+        ExceptionUtils.checkListEmptyExceptionWithMsg(entitys, new EnderecoNotFoundException("Endereço não encontrado", "Endereço referente ao id mencionado não foi encontrado"));
+
         return EnderecoMapper.toReponseList(entitys);
     }
 
     public List<EnderecoDTO> findByPessoaId(Long id) {
-        List<Endereco> lista = Optional.of(repository.findByPessoaId(id))
-                .orElseThrow(() -> new EnderecoNotFoundException("Endereço não encontrado",
+        List<Endereco> lista = repository.findByPessoaId(id);
+        ExceptionUtils.checkListEmptyExceptionWithMsg(lista,
+                new EnderecoNotFoundException("Endereço não encontrado",
                         "Endereço não encontrado referente ao ID pessoa informado"));
+
         return EnderecoMapper.toReponseList(lista);
     }
 
@@ -113,23 +116,13 @@ public class EnderecoService {
 
 
     public EnderecoDTO updateEnderecoPrincipalToN(Long id) {
-        Optional<Endereco> endereco = repository.findPrincipalEndereco(id, TipoPrincipal.S);
-        ExceptionUtils.checkOptionalEmptyExceptionWithMsg(endereco, new EnderecoPrincipalNotFound(
-                "Não existe endereço principal",
-                "Não existe endereço principal no ID pessoa informado"
-        ));
-        endereco.get().setTpPrincipal(TipoPrincipal.N);
-        return EnderecoMapper.toReponse(repository.save(endereco.get()));
-    }
+        Endereco endereco = repository.findPrincipalEndereco(id, TipoPrincipal.S).orElseThrow(() ->
+                new EnderecoPrincipalNotFound(
+                        "Não existe endereço principal",
+                        "Não existe endereço principal no ID pessoa informado"));
 
-    public List<EnderecoDTO> buscarEnderecoPorPessoa(Long id) {
-        List<Endereco> endereco = repository.findEnderecoByPessoaId(id);
-        ExceptionUtils.checkListEmptyExceptionWithMsg(endereco, new EnderecoPrincipalNotFound(
-                "Não existe endereço",
-                "Não existe endereço para o ID pessoa informado")
-        );
-
-        return EnderecoMapper.toReponseList(endereco);
+        endereco.setTpPrincipal(TipoPrincipal.N);
+        return EnderecoMapper.toReponse(repository.save(endereco));
     }
 
     public List<EnderecoDTO> updateEnderecos(List<EnderecoDTO> enderecosDTO) {
@@ -147,7 +140,9 @@ public class EnderecoService {
     }
 
     private List<Endereco> buscarEnderecosPorIds(List<Long> enderecosIds) {
-        return repository.findAllById(enderecosIds);
+        List<Endereco> enderecos = repository.findAllById(enderecosIds);
+        ExceptionUtils.checkListEmptyExceptionWithMsg(enderecos, new EnderecoNotFoundException("Endereços não encontrados", "Endereços não foram encontrados"));
+        return enderecos;
     }
 
     private List<Endereco> atualizarEnderecos(List<Endereco> enderecosDoBanco, List<EnderecoDTO> enderecosDTO) {
@@ -178,23 +173,19 @@ public class EnderecoService {
         return EnderecoMapper.toReponseList(enderecos);
     }
 
-    private void validateExistingPrincipal(EnderecoDTO addressDTO, EnderecoRepository repository) {
-        Optional<Endereco> existingPrincipal = repository.findEnderecoByTpPrincipalSim(addressDTO.getPessoa().getId());
+    private void validateExistingPrincipal(EnderecoSaveDTO addressDTO, EnderecoRepository repository, Pessoa pessoa) {
+        Optional<Endereco> existingPrincipal = repository.findEnderecoByTpPrincipalSim(pessoa.getId());
         if (existingPrincipal.isPresent() && addressDTO.getTpPrincipal().equals(TipoPrincipal.S)) {
-            String errorMessage = "Existe endereço principal para esta pessoa :" + addressDTO.getPessoa().getNomeCompleto() + "id:" + addressDTO.getPessoa().getId();
+            String errorMessage = "Existe endereço principal para esta pessoa :" + pessoa.getNomeCompleto() + "id:" + pessoa.getId();
             throw new EnderecoPrincipalFoundException("Já existe endereço principal", errorMessage);
         }
     }
-    public List<EnderecoDTO> getResponseSaveEnderecosByIdPessoa (Long idPessoa,List<EnderecoDTO> endereco) {
+
+    public List<EnderecoDTO> getResponseSaveEnderecosByIdPessoa(Long idPessoa, List<EnderecoSaveDTO> endereco) {
         List<EnderecoDTO> response = new ArrayList<EnderecoDTO>();
         if (pessoaService.existsPessoaById(idPessoa)) {
             Pessoa pessoa = pessoaRepository.findById(idPessoa).get();
-            List<EnderecoDTO> enderecosDTO = new ArrayList<>();
-            endereco.forEach(enderecoDTO -> {
-                enderecoDTO.setPessoa(pessoaRepository.findById(idPessoa).get());
-                enderecosDTO.add(enderecoDTO);
-            });
-            response = saveAll(enderecosDTO);
+            response = saveAll(endereco, pessoa);
         } else {
             throw new PessoaNotFoundException("ID pessoa não existe", "Não existe pessoa conforme o ID");
         }

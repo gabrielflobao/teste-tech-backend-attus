@@ -36,9 +36,9 @@ public class PessoaService {
     }
 
     public List<PessoaDTO> findAll() {
-        List<Pessoa> list = Optional.of(repository.findAll())
-                .orElseThrow(() -> new PessoaNotFoundException("Nenhuma pessoa encontrada!",
-                        "Não há pessoas cadastradas no sistema"));
+        List<Pessoa> list = repository.findAll();
+        ExceptionUtils.checkListEmptyExceptionWithMsg(list,new PessoaNotFoundException("Nenhuma pessoa encontrada!",
+                "Não há pessoas cadastradas no sistema"));
         return PessoaMapper.toReponseList(list);
     }
 
@@ -51,9 +51,9 @@ public class PessoaService {
     }
 
     public List<PessoaDTO> findAllById(List<Long> id) {
-        List<Pessoa> entitys = Optional.of(repository.findAllById(id))
-                .orElseThrow(() -> new PessoaNotFoundException("Nenhuma pessoa encontrada!",
-                        "Não há pessoas cadastradas no sistema"));
+        List<Pessoa> entitys = repository.findAllById(id);
+        ExceptionUtils.checkListEmptyExceptionWithMsg(entitys, new PessoaNotFoundException("Nenhuma pessoa encontrada!",
+                "Não há pessoas cadastradas no sistema"));
         return PessoaMapper.toReponseList(entitys);
     }
 
@@ -67,6 +67,8 @@ public class PessoaService {
         List<Pessoa> pessoasDoBanco = buscarPessoasPorIds(idsDasPessoasDTOS);
         List<Pessoa> pessoasAtualizadas = atualizarPessoas(pessoasDoBanco, pessoaDTOS);
         savePessoasNoBanco(pessoasAtualizadas);
+        ExceptionUtils.checkListEmptyExceptionWithMsg(pessoasAtualizadas, new PessoaNotFoundException("Nenhuma pessoa encontrada!",
+                "Não foram encontradas as pessoas para atualização"));
         return mapearPesssoasParaDTO(pessoasAtualizadas);
     }
 

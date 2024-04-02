@@ -1,0 +1,195 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > EnderecoMapper</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.br.teste.attus.mapper</a>
+</div>
+
+<h1>Coverage Summary for Class: EnderecoMapper (com.br.teste.attus.mapper)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EnderecoMapper</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    28,6%
+  </span>
+  <span class="absValue">
+    (2/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    28%
+  </span>
+  <span class="absValue">
+    (14/50)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.br.teste.attus.mapper;
+&nbsp;
+&nbsp;import com.br.teste.attus.dto.EnderecoDTO;
+&nbsp;import com.br.teste.attus.dto.PessoaDTO;
+&nbsp;import com.br.teste.attus.entity.Endereco;
+&nbsp;import com.br.teste.attus.entity.Pessoa;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;/**
+&nbsp; * Author : Gabriel F F Lobão
+&nbsp; */
+<b class="nc">&nbsp;public class EnderecoMapper {</b>
+&nbsp;
+&nbsp;
+&nbsp;    public static EnderecoDTO toReponse(Endereco object) {
+<b class="fc">&nbsp;        EnderecoDTO dto = new EnderecoDTO();</b>
+<b class="fc">&nbsp;        dto.setLogradouro(object.getLogradouro());</b>
+<b class="fc">&nbsp;        dto.setCep(object.getCep());</b>
+<b class="fc">&nbsp;        dto.setNumero(object.getNumero());</b>
+<b class="fc">&nbsp;        dto.setCidade(object.getCidade());</b>
+<b class="fc">&nbsp;        dto.setTpPrincipal(object.getTpPrincipal());</b>
+<b class="fc">&nbsp;        dto.setEstado(object.getEstado());</b>
+<b class="fc">&nbsp;        dto.setId(object.getId());</b>
+<b class="fc">&nbsp;        return dto;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static List&lt;EnderecoDTO&gt; toReponseList(List&lt;Endereco&gt; list) {
+<b class="fc">&nbsp;        if (list != null) {</b>
+<b class="fc">&nbsp;            return list.stream()</b>
+<b class="fc">&nbsp;                    .map(EnderecoMapper::toReponse)</b>
+<b class="fc">&nbsp;                    .collect(Collectors.toList());</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static Endereco toRequest(EnderecoDTO object) {
+<b class="nc">&nbsp;        Endereco entity = new Endereco();</b>
+<b class="nc">&nbsp;        entity.setLogradouro(object.getLogradouro());</b>
+<b class="nc">&nbsp;        entity.setCep(object.getCep());</b>
+<b class="nc">&nbsp;        entity.setNumero(object.getNumero());</b>
+<b class="nc">&nbsp;        entity.setCidade(object.getCidade());</b>
+<b class="nc">&nbsp;        entity.setEstado(object.getEstado());</b>
+<b class="nc">&nbsp;        entity.setTpPrincipal(object.getTpPrincipal());</b>
+<b class="nc">&nbsp;        entity.setPessoa(object.getPessoa());</b>
+<b class="nc">&nbsp;        return entity;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static List&lt;Endereco&gt; toRequestList(List&lt;EnderecoDTO&gt; list) {
+<b class="nc">&nbsp;        return list.stream().map(EnderecoMapper::toRequest).collect(Collectors.toList());</b>
+&nbsp;
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public static List&lt;Endereco&gt; toRequestListSave(List&lt;EnderecoDTO&gt; enderecos, Pessoa pessoa) {
+<b class="nc">&nbsp;        if (enderecos != null) {</b>
+<b class="nc">&nbsp;            List&lt;Endereco&gt; entities = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;            for (EnderecoDTO enderecoDTO : enderecos) {</b>
+<b class="nc">&nbsp;                Endereco entity = new Endereco();</b>
+<b class="nc">&nbsp;                entity.setLogradouro(enderecoDTO.getLogradouro());</b>
+<b class="nc">&nbsp;                entity.setCep(enderecoDTO.getCep());</b>
+<b class="nc">&nbsp;                entity.setNumero(enderecoDTO.getNumero());</b>
+<b class="nc">&nbsp;                entity.setCidade(enderecoDTO.getCidade());</b>
+<b class="nc">&nbsp;                entity.setEstado(enderecoDTO.getEstado());</b>
+<b class="nc">&nbsp;                entity.setTpPrincipal(enderecoDTO.getTpPrincipal());</b>
+<b class="nc">&nbsp;                entity.setPessoa(pessoa);</b>
+<b class="nc">&nbsp;                entities.add(entity);</b>
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;            return entities;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static Endereco toRequestUpdate(EnderecoDTO object) {
+<b class="nc">&nbsp;        Endereco entity = new Endereco();</b>
+<b class="nc">&nbsp;        entity.setLogradouro(object.getLogradouro());</b>
+<b class="nc">&nbsp;        entity.setCep(object.getCep());</b>
+<b class="nc">&nbsp;        entity.setNumero(object.getNumero());</b>
+<b class="nc">&nbsp;        entity.setCidade(object.getCidade());</b>
+<b class="nc">&nbsp;        entity.setEstado(object.getEstado());</b>
+<b class="nc">&nbsp;        entity.setTpPrincipal(object.getTpPrincipal());</b>
+<b class="nc">&nbsp;        entity.setPessoa(object.getPessoa());</b>
+<b class="nc">&nbsp;        entity.setId(object.getId());</b>
+<b class="nc">&nbsp;        return entity;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-04-01 18:52</div>
+</div>
+</body>
+</html>

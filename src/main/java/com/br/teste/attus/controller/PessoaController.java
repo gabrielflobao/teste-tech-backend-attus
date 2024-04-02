@@ -24,14 +24,14 @@ public class PessoaController {
     @Operation(summary = "Lista pessoas" +
             ".",method = "GET")
     @GetMapping("/listar")
-    public ResponseEntity<List<PessoaDTO>> listPessoas() {
+    public ResponseEntity<List<PessoaDTO>> getListPessoas() {
         List<PessoaDTO> pessoas = pessoaService.findAll();
         return ResponseEntity.ok(pessoas);
     }
     @Operation(summary = "Busca pessoa pelo ID" +
             ".",method = "GET")
-    @GetMapping("/buscar/id")
-    public ResponseEntity<List<PessoaDTO>> searchPessoasPorId(@RequestParam List<Long> ids) {
+    @GetMapping("/listar/id")
+    public ResponseEntity<List<PessoaDTO>> getListPessoasById(@RequestParam List<Long> ids) {
         List<PessoaDTO> pessoas = pessoaService.findAllById(ids);
         return ResponseEntity.ok(pessoas);
     }

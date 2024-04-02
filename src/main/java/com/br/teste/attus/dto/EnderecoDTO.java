@@ -3,7 +3,9 @@ package com.br.teste.attus.dto;
 import com.br.teste.attus.entity.Pessoa;
 import com.br.teste.attus.enuns.EstadoBrasil;
 import com.br.teste.attus.enuns.TipoPrincipal;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 
 /**
  * Author : Gabriel F F Lobão
@@ -104,5 +106,10 @@ public class EnderecoDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(obj,this);
     }
 }

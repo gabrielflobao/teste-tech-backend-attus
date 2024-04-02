@@ -2,6 +2,7 @@ package com.br.teste.attus.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Date;
@@ -24,6 +25,13 @@ public class Pessoa {
     private Date dataNascimento;
     public Pessoa() {
 
+    }
+
+    public Pessoa(Long id, String nomeCompleto, Date dataNascimento, List<Endereco> enderecos) {
+        this.id = id;
+        this.nomeCompleto = nomeCompleto;
+        this.dataNascimento = dataNascimento;
+        this.enderecos = enderecos;
     }
 
     public Pessoa(String nomeCompleto, Date dataNascimento, List<Endereco> enderecos) {
@@ -70,16 +78,15 @@ public class Pessoa {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Pessoa pessoa = (Pessoa) o;
-        return Objects.equals(nomeCompleto, pessoa.nomeCompleto) && Objects.equals(dataNascimento, pessoa.dataNascimento) && Objects.equals(enderecos, pessoa.enderecos);
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(obj,this);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(nomeCompleto, dataNascimento, enderecos);
     }
+
+
 }
 

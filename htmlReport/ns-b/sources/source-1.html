@@ -1,0 +1,301 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > EnderecoService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.br.teste.attus.service</a>
+</div>
+
+<h1>Coverage Summary for Class: EnderecoService (com.br.teste.attus.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EnderecoService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95,8%
+  </span>
+  <span class="absValue">
+    (23/24)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    93,3%
+  </span>
+  <span class="absValue">
+    (70/75)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.br.teste.attus.service;
+&nbsp;
+&nbsp;import com.br.teste.attus.dto.EnderecoDTO;
+&nbsp;import com.br.teste.attus.dto.EnderecoSaveDTO;
+&nbsp;import com.br.teste.attus.entity.Endereco;
+&nbsp;import com.br.teste.attus.entity.Pessoa;
+&nbsp;import com.br.teste.attus.enuns.TipoPrincipal;
+&nbsp;import com.br.teste.attus.exceptions.endereco.EnderecoExistenteException;
+&nbsp;import com.br.teste.attus.exceptions.endereco.EnderecoNotFoundException;
+&nbsp;import com.br.teste.attus.exceptions.endereco.EnderecoPrincipalFoundException;
+&nbsp;import com.br.teste.attus.exceptions.endereco.EnderecoPrincipalNotFound;
+&nbsp;import com.br.teste.attus.exceptions.pessoa.PessoaNotFoundException;
+&nbsp;import com.br.teste.attus.exceptions.utils.ExceptionUtils;
+&nbsp;import com.br.teste.attus.mapper.EnderecoMapper;
+&nbsp;import com.br.teste.attus.mapper.EnderecoSaveMapper;
+&nbsp;import com.br.teste.attus.repository.EnderecoRepository;
+&nbsp;import com.br.teste.attus.repository.PessoaRepository;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Objects;
+&nbsp;import java.util.Optional;
+&nbsp;import java.util.concurrent.atomic.AtomicReference;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;/**
+&nbsp; * Author : Gabriel F F Lobão
+&nbsp; */
+&nbsp;@Service
+<b class="fc">&nbsp;public class EnderecoService {</b>
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private EnderecoRepository repository;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private PessoaRepository pessoaRepository;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private PessoaService pessoaService;
+&nbsp;
+&nbsp;    public List&lt;EnderecoDTO&gt; saveAllByIdPessoa(Long idPessoa, List&lt;EnderecoSaveDTO&gt; endereco) {
+<b class="fc">&nbsp;        return getResponseSaveEnderecosByIdPessoa(idPessoa, endereco);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;EnderecoDTO&gt; saveAll(List&lt;EnderecoSaveDTO&gt; endereco, Pessoa pessoa) {
+<b class="fc">&nbsp;        List&lt;Endereco&gt; enderecosSalvar = new ArrayList&lt;Endereco&gt;();</b>
+<b class="fc">&nbsp;        endereco.forEach(enderecoDTO -&gt; {</b>
+<b class="fc">&nbsp;            validateExistingPrincipal(enderecoDTO, repository, pessoa);</b>
+<b class="fc">&nbsp;            enderecosSalvar.add(EnderecoSaveMapper.toRequest(enderecoDTO, pessoa));</b>
+&nbsp;        });
+<b class="fc">&nbsp;        ExceptionUtils.checkListEmptyExceptionWithMsg(enderecosSalvar, new EnderecoNotFoundException(&quot;Não há endereços para salvar&quot;,</b>
+&nbsp;                &quot;Não existem endereços para salvar&quot;));
+<b class="fc">&nbsp;        return EnderecoMapper.toReponseList(repository.saveAll(enderecosSalvar));</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public EnderecoDTO update(EnderecoDTO endereco) {
+<b class="nc">&nbsp;        Endereco entity = EnderecoMapper.toRequest(endereco);</b>
+<b class="nc">&nbsp;        return EnderecoMapper.toReponse(repository.save(entity));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;EnderecoDTO&gt; findAll() {
+<b class="fc">&nbsp;        List&lt;Endereco&gt; list = repository.findAll();</b>
+<b class="fc">&nbsp;        ExceptionUtils.checkListEmptyExceptionWithMsg(list, new EnderecoNotFoundException(&quot;Não existe endereços&quot;,</b>
+&nbsp;                &quot;Não existe endereços cadastrados&quot;));
+<b class="nc">&nbsp;        return EnderecoMapper.toReponseList(list);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public EnderecoDTO findById(Long id) {
+<b class="fc">&nbsp;        Endereco entity = repository.findById(id)</b>
+<b class="fc">&nbsp;                .orElseThrow(() -&gt; new EnderecoNotFoundException(&quot;Endereço não existe&quot;, &quot;Código do endereço informado não existe&quot;));</b>
+<b class="nc">&nbsp;        return EnderecoMapper.toReponse(entity);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;EnderecoDTO&gt; findAllById(List&lt;Long&gt; id) {
+<b class="fc">&nbsp;        List&lt;Endereco&gt; entitys = repository.findAllById(id);</b>
+<b class="fc">&nbsp;        ExceptionUtils.checkListEmptyExceptionWithMsg(entitys, new EnderecoNotFoundException(&quot;Endereço não encontrado&quot;, &quot;Endereço referente ao id mencionado não foi encontrado&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        return EnderecoMapper.toReponseList(entitys);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;EnderecoDTO&gt; findByPessoaId(Long id) {
+<b class="fc">&nbsp;        List&lt;Endereco&gt; lista = repository.findByPessoaId(id);</b>
+<b class="fc">&nbsp;        ExceptionUtils.checkListEmptyExceptionWithMsg(lista,</b>
+&nbsp;                new EnderecoNotFoundException(&quot;Endereço não encontrado&quot;,
+&nbsp;                        &quot;Endereço não encontrado referente ao ID pessoa informado&quot;));
+&nbsp;
+<b class="fc">&nbsp;        return EnderecoMapper.toReponseList(lista);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public EnderecoDTO defineEnderecoPrincipal(Long id) {
+<b class="fc">&nbsp;        AtomicReference&lt;Endereco&gt; enderecoRef = new AtomicReference&lt;&gt;();</b>
+<b class="fc">&nbsp;        Optional&lt;Endereco&gt; opEndereco = repository.findById(id);</b>
+&nbsp;
+<b class="fc">&nbsp;        opEndereco.ifPresentOrElse(</b>
+&nbsp;                endereco -&gt; {
+<b class="fc">&nbsp;                    enderecoRef.set(endereco);</b>
+<b class="fc">&nbsp;                    Optional&lt;Endereco&gt; opEnderecoPrincipal = repository.findEnderecoByTpPrincipalSim(id);</b>
+<b class="fc">&nbsp;                    if (opEnderecoPrincipal.isPresent()) {</b>
+<b class="fc">&nbsp;                        throw new EnderecoPrincipalFoundException(&quot;Endereço principal existente&quot;, &quot;Endereço definido como principal já existe&quot;);</b>
+&nbsp;                    } else {
+<b class="fc">&nbsp;                        endereco.setTpPrincipal(TipoPrincipal.S);</b>
+<b class="fc">&nbsp;                        repository.save(endereco);</b>
+&nbsp;                    }
+&nbsp;                },
+&nbsp;                () -&gt; {
+<b class="fc">&nbsp;                    throw new EnderecoNotFoundException(&quot;Não existe endereço para o ID informado&quot;, &quot;Não existe endereço conforme o ID informado&quot;);</b>
+&nbsp;                }
+&nbsp;        );
+<b class="fc">&nbsp;        Endereco endereco = enderecoRef.get();</b>
+<b class="fc">&nbsp;        return EnderecoMapper.toReponse(endereco);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public EnderecoDTO updateEnderecoPrincipalToN(Long id) {
+<b class="fc">&nbsp;        Endereco endereco = repository.findPrincipalEndereco(id, TipoPrincipal.S).orElseThrow(() -&gt;</b>
+<b class="fc">&nbsp;                new EnderecoPrincipalNotFound(</b>
+&nbsp;                        &quot;Não existe endereço principal&quot;,
+&nbsp;                        &quot;Não existe endereço principal no ID pessoa informado&quot;));
+&nbsp;
+<b class="fc">&nbsp;        endereco.setTpPrincipal(TipoPrincipal.N);</b>
+<b class="fc">&nbsp;        return EnderecoMapper.toReponse(repository.save(endereco));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;EnderecoDTO&gt; updateEnderecos(List&lt;EnderecoDTO&gt; enderecosDTO) {
+<b class="fc">&nbsp;        List&lt;Long&gt; idsDosEnderecosDTO = extrairIdsDosEnderecos(enderecosDTO);</b>
+<b class="fc">&nbsp;        List&lt;Endereco&gt; enderecosDoBanco = buscarEnderecosPorIds(idsDosEnderecosDTO);</b>
+<b class="fc">&nbsp;        List&lt;Endereco&gt; enderecosAtualizados = atualizarEnderecos(enderecosDoBanco, enderecosDTO);</b>
+<b class="fc">&nbsp;        salvarEnderecosNoBanco(enderecosAtualizados);</b>
+<b class="fc">&nbsp;        return mapearEnderecosParaDTO(enderecosAtualizados);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private List&lt;Long&gt; extrairIdsDosEnderecos(List&lt;EnderecoDTO&gt; enderecosDTO) {
+<b class="fc">&nbsp;        return enderecosDTO.stream()</b>
+<b class="fc">&nbsp;                .map(EnderecoDTO::getId)</b>
+<b class="fc">&nbsp;                .collect(Collectors.toList());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private List&lt;Endereco&gt; buscarEnderecosPorIds(List&lt;Long&gt; enderecosIds) {
+<b class="fc">&nbsp;        List&lt;Endereco&gt; enderecos = repository.findAllById(enderecosIds);</b>
+<b class="fc">&nbsp;        ExceptionUtils.checkListEmptyExceptionWithMsg(enderecos, new EnderecoNotFoundException(&quot;Endereços não encontrados&quot;, &quot;Endereços não foram encontrados&quot;));</b>
+<b class="fc">&nbsp;        return enderecos;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private List&lt;Endereco&gt; atualizarEnderecos(List&lt;Endereco&gt; enderecosDoBanco, List&lt;EnderecoDTO&gt; enderecosDTO) {
+<b class="fc">&nbsp;        return enderecosDoBanco.stream()</b>
+<b class="fc">&nbsp;                .peek(enderecoDoBanco -&gt; atualizarEndereco(enderecoDoBanco, enderecosDTO))</b>
+<b class="fc">&nbsp;                .collect(Collectors.toList());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void salvarEnderecosNoBanco(List&lt;Endereco&gt; enderecos) {
+<b class="fc">&nbsp;        repository.saveAll(enderecos);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    protected void atualizarEndereco(Endereco enderecoDoBanco, List&lt;EnderecoDTO&gt; enderecosDTO) {
+<b class="fc">&nbsp;        enderecosDTO.stream()</b>
+<b class="fc">&nbsp;                .filter(enderecoDTO -&gt; Objects.equals(enderecoDTO.getId(), enderecoDoBanco.getId()))</b>
+<b class="fc">&nbsp;                .findFirst()</b>
+<b class="fc">&nbsp;                .ifPresent(enderecoDTO -&gt; {</b>
+<b class="fc">&nbsp;                    enderecoDoBanco.setLogradouro(Objects.requireNonNullElse(enderecoDTO.getLogradouro(), enderecoDoBanco.getLogradouro()));</b>
+<b class="fc">&nbsp;                    enderecoDoBanco.setCep(Objects.requireNonNullElse(enderecoDTO.getCep(), enderecoDoBanco.getCep()));</b>
+<b class="fc">&nbsp;                    enderecoDoBanco.setNumero(Objects.requireNonNullElse(enderecoDTO.getNumero(), enderecoDoBanco.getNumero()));</b>
+<b class="fc">&nbsp;                    enderecoDoBanco.setCidade(Objects.requireNonNullElse(enderecoDTO.getCidade(), enderecoDoBanco.getCidade()));</b>
+<b class="fc">&nbsp;                    enderecoDoBanco.setTpPrincipal(Objects.requireNonNullElse(enderecoDTO.getTpPrincipal(), enderecoDoBanco.getTpPrincipal()));</b>
+<b class="fc">&nbsp;                    enderecoDoBanco.setEstado(Objects.requireNonNullElse(enderecoDTO.getEstado(), enderecoDoBanco.getEstado()));</b>
+&nbsp;                });
+&nbsp;    }
+&nbsp;
+&nbsp;    private List&lt;EnderecoDTO&gt; mapearEnderecosParaDTO(List&lt;Endereco&gt; enderecos) {
+<b class="fc">&nbsp;        return EnderecoMapper.toReponseList(enderecos);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void validateExistingPrincipal(EnderecoSaveDTO addressDTO, EnderecoRepository repository, Pessoa pessoa) {
+<b class="fc">&nbsp;        Optional&lt;Endereco&gt; existingPrincipal = repository.findEnderecoByTpPrincipalSim(pessoa.getId());</b>
+<b class="fc">&nbsp;        if (existingPrincipal.isPresent() &amp;&amp; addressDTO.getTpPrincipal().equals(TipoPrincipal.S)) {</b>
+<b class="fc">&nbsp;            String errorMessage = &quot;Existe endereço principal para esta pessoa :&quot; + pessoa.getNomeCompleto() + &quot;id:&quot; + pessoa.getId();</b>
+<b class="fc">&nbsp;            throw new EnderecoPrincipalFoundException(&quot;Já existe endereço principal&quot;, errorMessage);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;EnderecoDTO&gt; getResponseSaveEnderecosByIdPessoa(Long idPessoa, List&lt;EnderecoSaveDTO&gt; endereco) {
+<b class="fc">&nbsp;        List&lt;EnderecoDTO&gt; response = new ArrayList&lt;EnderecoDTO&gt;();</b>
+<b class="fc">&nbsp;        if (pessoaService.existsPessoaById(idPessoa)) {</b>
+<b class="fc">&nbsp;            Pessoa pessoa = pessoaRepository.findById(idPessoa).get();</b>
+<b class="fc">&nbsp;            response = saveAll(endereco, pessoa);</b>
+<b class="fc">&nbsp;        } else {</b>
+<b class="fc">&nbsp;            throw new PessoaNotFoundException(&quot;ID pessoa não existe&quot;, &quot;Não existe pessoa conforme o ID&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return response;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-04-01 18:52</div>
+</div>
+</body>
+</html>

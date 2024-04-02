@@ -8,14 +8,10 @@ import java.util.Optional;
 
 public class ExceptionUtils {
     public static void checkListEmptyExceptionWithMsg(List<?> empty, AbstractException ex) {
-        if (empty.isEmpty()) {
+        if (empty==null||empty.isEmpty()) {
             throw ex;
         }
     }
 
-    public static void checkOptionalEmptyExceptionWithMsg(Optional op, AbstractException ex) {
-        if (op.isEmpty()) {
-            throw ex;
-        }
-    }
+
 }

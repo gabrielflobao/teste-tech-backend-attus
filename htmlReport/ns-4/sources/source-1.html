@@ -1,0 +1,261 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > Endereco</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.br.teste.attus.entity</a>
+</div>
+
+<h1>Coverage Summary for Class: Endereco (com.br.teste.attus.entity)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Endereco</td>
+<td class="coverageStat">
+  <span class="percent">
+    85,7%
+  </span>
+  <span class="absValue">
+    (18/21)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    76,7%
+  </span>
+  <span class="absValue">
+    (33/43)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Endereco$HibernateInstantiator$XdXBelhn</td>
+  </tr>
+  <tr>
+    <td class="name">Endereco$HibernateProxy$PQPD28Xx</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    85,7%
+  </span>
+  <span class="absValue">
+    (18/21)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    76,7%
+  </span>
+  <span class="absValue">
+    (33/43)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.br.teste.attus.entity;
+&nbsp;
+&nbsp;import com.br.teste.attus.enuns.EstadoBrasil;
+&nbsp;import com.br.teste.attus.enuns.TipoPrincipal;
+&nbsp;import com.fasterxml.jackson.annotation.JsonIgnore;
+&nbsp;import jakarta.persistence.*;
+&nbsp;import org.apache.commons.lang3.builder.EqualsBuilder;
+&nbsp;
+&nbsp;/**
+&nbsp; * Author : Gabriel F F Lobão
+&nbsp; */
+&nbsp;@Entity
+&nbsp;@Table(name = &quot;TB_ENDERECO&quot;)
+&nbsp;public class Endereco {
+&nbsp;    @Id
+&nbsp;    @GeneratedValue(strategy = GenerationType.IDENTITY)
+&nbsp;    private Long id;
+&nbsp;
+&nbsp;    @Column(name = &quot;LOGRADOURO&quot;)
+&nbsp;    private String logradouro;
+&nbsp;
+&nbsp;    @Column(name = &quot;CEP&quot;)
+&nbsp;    private String cep;
+&nbsp;
+&nbsp;    @Column(name = &quot;NUMERO&quot;)
+&nbsp;    private Integer numero;
+&nbsp;
+&nbsp;    @Column(name = &quot;CIDADE&quot;)
+&nbsp;    private String cidade;
+&nbsp;    @Enumerated(EnumType.STRING)
+&nbsp;    @Column(name = &quot;TP_PRINCIPAL&quot;, columnDefinition = &quot;CHAR DEFAULT &#39;N&#39; &quot;,nullable = false)
+&nbsp;    private TipoPrincipal tpPrincipal;
+&nbsp;    @Enumerated
+&nbsp;    @Column(name = &quot;ESTADO&quot;)
+&nbsp;    private EstadoBrasil estado;
+&nbsp;
+&nbsp;    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Pessoa.class,cascade = CascadeType.ALL)
+&nbsp;    @JoinColumn(name = &quot;ID_PESSOA&quot;)
+&nbsp;    @JsonIgnore
+&nbsp;    private Pessoa pessoa;
+&nbsp;
+<b class="fc">&nbsp;    public Endereco() {</b>
+&nbsp;
+&nbsp;    }
+<b class="fc">&nbsp;    public Endereco(Long id,String logradouro, String cep, Integer numero, String cidade,  EstadoBrasil estado, TipoPrincipal tpPrincipal) {</b>
+<b class="fc">&nbsp;        this.logradouro = logradouro;</b>
+<b class="fc">&nbsp;        this.cep = cep;</b>
+<b class="fc">&nbsp;        this.numero = numero;</b>
+<b class="fc">&nbsp;        this.cidade = cidade;</b>
+<b class="fc">&nbsp;        this.tpPrincipal = tpPrincipal;</b>
+<b class="fc">&nbsp;        this.estado = estado;</b>
+<b class="fc">&nbsp;        this.id = id;</b>
+&nbsp;    }
+<b class="nc">&nbsp;    public Endereco(String logradouro, String cep, Integer numero, String cidade,  EstadoBrasil estado, TipoPrincipal tpPrincipal, Pessoa pessoa) {</b>
+<b class="nc">&nbsp;        this.logradouro = logradouro;</b>
+<b class="nc">&nbsp;        this.cep = cep;</b>
+<b class="nc">&nbsp;        this.numero = numero;</b>
+<b class="nc">&nbsp;        this.cidade = cidade;</b>
+<b class="nc">&nbsp;        this.tpPrincipal = tpPrincipal;</b>
+<b class="nc">&nbsp;        this.estado = estado;</b>
+<b class="nc">&nbsp;        this.pessoa = pessoa;</b>
+&nbsp;    }
+<b class="fc">&nbsp;    public Endereco(Long id,String logradouro, String cep, Integer numero, String cidade,  EstadoBrasil estado, TipoPrincipal tpPrincipal, Pessoa pessoa) {</b>
+<b class="fc">&nbsp;        this.logradouro = logradouro;</b>
+<b class="fc">&nbsp;        this.cep = cep;</b>
+<b class="fc">&nbsp;        this.numero = numero;</b>
+<b class="fc">&nbsp;        this.cidade = cidade;</b>
+<b class="fc">&nbsp;        this.tpPrincipal = tpPrincipal;</b>
+<b class="fc">&nbsp;        this.estado = estado;</b>
+<b class="fc">&nbsp;        this.pessoa = pessoa;</b>
+<b class="fc">&nbsp;        this.id = id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    public Long getId() {
+<b class="fc">&nbsp;        return id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setId(Long id) {
+<b class="nc">&nbsp;        this.id = id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getLogradouro() {
+<b class="fc">&nbsp;        return logradouro;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setLogradouro(String logradouro) {
+<b class="fc">&nbsp;        this.logradouro = logradouro;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getCep() {
+<b class="fc">&nbsp;        return cep;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setCep(String cep) {
+<b class="fc">&nbsp;        this.cep = cep;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Integer getNumero() {
+<b class="fc">&nbsp;        return numero;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setNumero(Integer numero) {
+<b class="fc">&nbsp;        this.numero = numero;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getCidade() {
+<b class="fc">&nbsp;        return cidade;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setCidade(String cidade) {
+<b class="fc">&nbsp;        this.cidade = cidade;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public TipoPrincipal getTpPrincipal() {
+<b class="fc">&nbsp;        return tpPrincipal;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setTpPrincipal(TipoPrincipal tpPrincipal) {
+<b class="fc">&nbsp;        this.tpPrincipal = tpPrincipal;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public EstadoBrasil getEstado() {
+<b class="fc">&nbsp;        return estado;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setEstado(EstadoBrasil estado) {
+<b class="fc">&nbsp;        this.estado = estado;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setPessoa(Pessoa pessoa) {
+<b class="fc">&nbsp;        this.pessoa = pessoa;</b>
+&nbsp;    }
+&nbsp;    public Pessoa getPessoa() {
+<b class="nc">&nbsp;        return pessoa;</b>
+&nbsp;    }
+&nbsp;    @Override
+&nbsp;    public boolean equals(Object obj) {
+<b class="fc">&nbsp;        return EqualsBuilder.reflectionEquals(obj,this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-04-01 18:52</div>
+</div>
+</body>
+</html>

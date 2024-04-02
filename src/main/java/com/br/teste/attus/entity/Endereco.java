@@ -4,6 +4,7 @@ import com.br.teste.attus.enuns.EstadoBrasil;
 import com.br.teste.attus.enuns.TipoPrincipal;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 
 /**
  * Author : Gabriel F F Lobão
@@ -41,6 +42,15 @@ public class Endereco {
     public Endereco() {
 
     }
+    public Endereco(Long id,String logradouro, String cep, Integer numero, String cidade,  EstadoBrasil estado, TipoPrincipal tpPrincipal) {
+        this.logradouro = logradouro;
+        this.cep = cep;
+        this.numero = numero;
+        this.cidade = cidade;
+        this.tpPrincipal = tpPrincipal;
+        this.estado = estado;
+        this.id = id;
+    }
     public Endereco(String logradouro, String cep, Integer numero, String cidade,  EstadoBrasil estado, TipoPrincipal tpPrincipal, Pessoa pessoa) {
         this.logradouro = logradouro;
         this.cep = cep;
@@ -50,6 +60,17 @@ public class Endereco {
         this.estado = estado;
         this.pessoa = pessoa;
     }
+    public Endereco(Long id,String logradouro, String cep, Integer numero, String cidade,  EstadoBrasil estado, TipoPrincipal tpPrincipal, Pessoa pessoa) {
+        this.logradouro = logradouro;
+        this.cep = cep;
+        this.numero = numero;
+        this.cidade = cidade;
+        this.tpPrincipal = tpPrincipal;
+        this.estado = estado;
+        this.pessoa = pessoa;
+        this.id = id;
+    }
+
 
 
 
@@ -115,6 +136,9 @@ public class Endereco {
     public Pessoa getPessoa() {
         return pessoa;
     }
-
+    @Override
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(obj,this);
+    }
 
 }
