@@ -7,7 +7,7 @@
     <div class="container">
         <header>
             <h1>ATTUS Procuradoria Digital</h1>
-            <p>Teste Técnico - Back End </p>
+            <h2>Teste Técnico - Back End 💻</h2>
         </header>
         <section>
             <h2>Visão Geral</h2>
@@ -44,16 +44,6 @@ Uma pessoa deve possuir os seguintes dados: 
                 <li>JUnit</li>
                 <li>Mockito</li>
             </ul>
-        </section>
-        <section>
-            <h2>Como Contribuir</h2>
-            <p>Se você estiver interessado em contribuir para este projeto, siga estas etapas:</p>
-            <ol>
-                <li>Faça um fork do repositório.</li>
-                <li>Crie uma nova branch para suas alterações.</li>
-                <li>Envie suas alterações para o repositório.</li>
-                <li>Abra uma solicitação de pull.</li>
-            </ol>
         </section>
         <footer>
             <p>© Projeto desenvolvido por Gabriel Figueiredo Fernandes Lobão.</p>
