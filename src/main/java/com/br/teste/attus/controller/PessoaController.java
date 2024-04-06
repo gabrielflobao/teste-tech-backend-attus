@@ -2,6 +2,7 @@ package com.br.teste.attus.controller;
 
 import com.br.teste.attus.dto.EnderecoDTO;
 import com.br.teste.attus.dto.PessoaDTO;
+import com.br.teste.attus.dto.PessoaSaveDTO;
 import com.br.teste.attus.service.EnderecoService;
 import com.br.teste.attus.service.PessoaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,8 +39,8 @@ public class PessoaController {
     @Operation(summary = "Cadastra pessoa(s)" +
             ".",method = "POST")
     @PostMapping("/cadastrar")
-    public ResponseEntity<List<PessoaDTO>> createPessoas(@RequestBody List<PessoaDTO> pessoasEnderecos) {
-         List<PessoaDTO> response = pessoaService.saveLista(pessoasEnderecos);
+    public ResponseEntity<List<PessoaSaveDTO>> createPessoas(@RequestBody List<PessoaSaveDTO> pessoasEnderecos) {
+         List<PessoaSaveDTO> response = pessoaService.saveLista(pessoasEnderecos);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 

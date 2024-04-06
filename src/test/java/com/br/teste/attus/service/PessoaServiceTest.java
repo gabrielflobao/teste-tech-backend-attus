@@ -1,15 +1,14 @@
 package com.br.teste.attus.service;
 
-import com.br.teste.attus.dto.EnderecoDTO;
 import com.br.teste.attus.dto.PessoaDTO;
-import com.br.teste.attus.entity.Endereco;
+import com.br.teste.attus.dto.PessoaSaveDTO;
 import com.br.teste.attus.entity.Pessoa;
 import com.br.teste.attus.enuns.EstadoBrasil;
 import com.br.teste.attus.enuns.TipoPrincipal;
-import com.br.teste.attus.exceptions.endereco.EnderecoNotFoundException;
 import com.br.teste.attus.exceptions.pessoa.PessoaNotFoundException;
-import com.br.teste.attus.mapper.PessoaMapper;
-import com.br.teste.attus.repository.EnderecoRepository;
+import com.br.teste.attus.mapper.PessoaRequestMapper;
+import com.br.teste.attus.mapper.PessoaResponseMapper;
+import com.br.teste.attus.mapper.PessoaSaveResponseMapper;
 import com.br.teste.attus.repository.PessoaRepository;
 import com.br.teste.attus.utils.DateUtils;
 import org.assertj.core.api.Assertions;
@@ -24,10 +23,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.br.teste.attus.commons.PessoaConstant.createTestPessoaIdNomeDataNascimento;
 import static com.br.teste.attus.utils.DateUtils.parseDate;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,21 +38,21 @@ class PessoaServiceTest {
     private PessoaService pessoaService;
     @Mock
     private PessoaRepository pessoaRepository;
-
+    @Mock
+    private PessoaSaveResponseMapper mapper;
     @Test
     void save_Sucessfull() {
-        PessoaDTO pessoaRequestTest = new PessoaDTO("Gabriel",parseDate("24/05/2000"),null);
-        when(pessoaRepository.save(any(Pessoa.class))).thenReturn(new Pessoa());
-        Assertions.assertThat(pessoaService.save(pessoaRequestTest).equals(pessoaRequestTest));
+        Pessoa pessoa = createTestPessoaIdNomeDataNascimento();
+        PessoaSaveDTO pessoaSaveDTO = mapper.toResponse(pessoa);
+        doReturn(pessoa).when(pessoaRepository).save(any(Pessoa.class));
+        assertThat(pessoaService.save(pessoaSaveDTO)).isEqualTo(pessoaSaveDTO);
     }
 
     @Test
     void saveLista_Sucessfull() {
-        PessoaDTO pessoaRequestTest = new PessoaDTO("Gabriel",parseDate("24/05/2000"),null);
-        List<PessoaDTO> listRequestTest = new ArrayList<>();
-        listRequestTest.add(pessoaRequestTest);
-        when(pessoaRepository.saveAll(anyList())).thenReturn(List.of(new Pessoa()));
-        Assertions.assertThat(pessoaService.saveLista(listRequestTest).equals(listRequestTest));
+        List<Pessoa> pessoas = List.of(createTestPessoaIdNomeDataNascimento());
+        List<PessoaSaveDTO> pessoasDTO = List.of(PessoaSaveResponseMapper.toResponse(createTestPessoaIdNomeDataNascimento()));
+        assertThat(pessoaService.saveLista(pessoasDTO).containsAll(pessoasDTO));
     }
 
     @Test
@@ -61,18 +62,18 @@ class PessoaServiceTest {
 
     }   @Test
     void findAll_Sucessful() {
-        PessoaDTO pessoaRequestTest = new PessoaDTO("Gabriel",parseDate("24/05/2000"),null);
-        List<PessoaDTO> listRequestTest = new ArrayList<>();
+        Pessoa pessoaRequestTest = createTestPessoaIdNomeDataNascimento();
+        List<Pessoa> listRequestTest = new ArrayList<>();
         listRequestTest.add(pessoaRequestTest);
-        when(pessoaRepository.findAll()).thenReturn(PessoaMapper.toRequestList(List.of(pessoaRequestTest)));
-        Assertions.assertThat(pessoaService.findAll().containsAll(listRequestTest));
+        when(pessoaRepository.findAll()).thenReturn(List.of(pessoaRequestTest));
+        Assertions.assertThat(pessoaService.findAll().containsAll(PessoaResponseMapper.toReponseList(listRequestTest)));
     }
 
     @Test
     void findById_Sucessful() {
-        Pessoa pessoaRequestTest = new Pessoa(1L,"Gabriel",parseDate("24/05/2000"),null);
+        Pessoa pessoaRequestTest = createTestPessoaIdNomeDataNascimento();
         when(pessoaRepository.findById(pessoaRequestTest.getId())).thenReturn(Optional.of(pessoaRequestTest));
-        Assertions.assertThat(pessoaService.findById(pessoaRequestTest.getId()).equals(pessoaRequestTest));
+        Assertions.assertThat(pessoaService.findById(pessoaRequestTest.getId()).equals(PessoaResponseMapper.toReponse(pessoaRequestTest)));
     }
     @Test
     void findById_Throws_PessoaNotFoundException() {
@@ -83,8 +84,8 @@ class PessoaServiceTest {
 
     @Test
     void findAllById_Sucessful() {
-        PessoaDTO pessoaResponseTest = new PessoaDTO(1L,"Gabriel",parseDate("24/05/2000"));
-        Pessoa pessoaRequestTest = new Pessoa(1L,"Gabriel",parseDate("24/05/2000"),null);
+        PessoaDTO pessoaResponseTest = PessoaResponseMapper.toReponse(createTestPessoaIdNomeDataNascimento());
+        Pessoa pessoaRequestTest = createTestPessoaIdNomeDataNascimento();
         when(pessoaRepository.findAllById(List.of(1L))).thenReturn(List.of(pessoaRequestTest));
         Assertions.assertThat(pessoaService.findAllById(List.of(pessoaRequestTest.getId())).equals(pessoaResponseTest));
     }
@@ -102,25 +103,14 @@ class PessoaServiceTest {
 
     @Test
     void updatePessoas_sucessfull() {
-        Long id = 1L;
-        String logradouro = "123 Main St";
-        String cep = "12345-678";
-        Integer numero = 10;
-        String cidade = "Cityville";
-        EstadoBrasil estado = EstadoBrasil.ACRE;
-        TipoPrincipal tpPrincipal = TipoPrincipal.S;
-        Long providedId = 1L;
-        String nomePessoa = "Gabriel Lobão";
-        String nomeAlterado = "Gabriel F F Lobão";
-        Date data = DateUtils.parseDate("24/05/2000");
-        Pessoa pessoa = new Pessoa(id,nomePessoa,data,null);
-        Optional<Pessoa> pessoaOptional = Optional.of(pessoa);
-        PessoaDTO pessoaResponse = new PessoaDTO(id, nomeAlterado,data);
+        Pessoa pessoa = createTestPessoaIdNomeDataNascimento();
         List<Pessoa> pessoasLista = new ArrayList<>();
         pessoasLista.add(pessoa);
+        pessoasLista.get(0).setNomeCompleto("Lobao");
+        List<PessoaDTO> pessoaAlterada = PessoaResponseMapper.toReponseList(pessoasLista);
         when(pessoaRepository.findAllById(List.of(pessoa.getId()))).thenReturn(pessoasLista);
         when(pessoaRepository.saveAll(List.of(pessoa))).thenReturn(pessoasLista);
-        List<PessoaDTO> result = pessoaService.updatePessoas(List.of(pessoaResponse));
-        Assertions.assertThat(result.containsAll(List.of(pessoaResponse)));
+        List<PessoaDTO> result = pessoaService.updatePessoas(PessoaResponseMapper.toReponseList(pessoasLista));
+        Assertions.assertThat(result.containsAll(List.of(pessoaAlterada)));
     }
 }

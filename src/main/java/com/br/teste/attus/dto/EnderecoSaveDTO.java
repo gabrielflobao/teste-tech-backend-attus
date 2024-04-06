@@ -26,6 +26,10 @@ public class EnderecoSaveDTO {
 
     }
 
+    public EnderecoSaveDTO() {
+
+    }
+
     public String getLogradouro() {
         return logradouro;
     }

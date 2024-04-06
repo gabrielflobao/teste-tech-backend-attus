@@ -11,27 +11,22 @@ import com.br.teste.attus.exceptions.endereco.EnderecoNotFoundException;
 import com.br.teste.attus.exceptions.endereco.EnderecoPrincipalFoundException;
 import com.br.teste.attus.exceptions.endereco.EnderecoPrincipalNotFound;
 import com.br.teste.attus.exceptions.pessoa.PessoaNotFoundException;
-import com.br.teste.attus.mapper.EnderecoMapper;
-import com.br.teste.attus.mapper.PessoaMapper;
+import com.br.teste.attus.mapper.EnderecoResponseMapper;
 import com.br.teste.attus.repository.EnderecoRepository;
 import com.br.teste.attus.repository.PessoaRepository;
-import com.br.teste.attus.service.EnderecoService;
-import com.br.teste.attus.utils.DateUtils;
 import org.assertj.core.api.AbstractThrowableAssert;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ThrowableAssert;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.sql.Date;
 import java.util.*;
 
-import static com.br.teste.attus.commons.EnderecoConstant.ENDERECO;
-import static org.awaitility.Awaitility.given;
+import static com.br.teste.attus.commons.EnderecoConstant.*;
+import static com.br.teste.attus.commons.PessoaConstant.createTestPessoaIdNomeDataNascimento;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -51,7 +46,7 @@ public class EnderecoServiceTest {
     private PessoaService pessoaService;
 
     @Mock
-    private EnderecoMapper mapper;
+    private EnderecoResponseMapper mapper;
 
 
     @Test
@@ -178,17 +173,10 @@ public class EnderecoServiceTest {
 
     @Test
     public void updateEnderecoPrincipalToN_Sucessful() {
-        Long id = 1L;
-        String logradouro = "123 Main St";
-        String cep = "12345-678";
-        Integer numero = 10;
-        String cidade = "Cityville";
-        EstadoBrasil estado = EstadoBrasil.ACRE;
-        TipoPrincipal tpPrincipal = TipoPrincipal.S;
         Long providedId = 1L;
-        Endereco enderecoEntity = new Endereco(id, logradouro, cep, numero, cidade, estado, tpPrincipal);
+        Endereco enderecoEntity = createEnderecoIdLogradouroCepNumeroCidadeEstadoTipoPrincipalS();
         Optional<Endereco> endereco = Optional.of(enderecoEntity);
-        EnderecoDTO enderecoResponse = new EnderecoDTO(id, logradouro, cep, numero, cidade, TipoPrincipal.N, estado,null);
+        EnderecoDTO enderecoResponse = createEnderecoDTOLogradouroCepNumeroCidadeEstadoTipoPrincipalN(providedId);
         when(enderecoRepository.findPrincipalEndereco(providedId, TipoPrincipal.S)).thenReturn(endereco);
         when(enderecoRepository.save(endereco.get())).thenReturn(enderecoEntity);
         EnderecoDTO result = enderecoService.updateEnderecoPrincipalToN(providedId);
@@ -238,15 +226,9 @@ public class EnderecoServiceTest {
     @Test
     public void defineEnderecoPrincipal_Sucessful() {
         // Given
-        Long id = 1L;
-        String logradouro = "123 Main St";
-        String cep = "12345-678";
-        Integer numero = 10;
-        String cidade = "Cityville";
-        EstadoBrasil estado = EstadoBrasil.ACRE;
-        TipoPrincipal tpPrincipal = TipoPrincipal.N;
-        Endereco enderecoEntity = new Endereco(id, logradouro, cep, numero, cidade, estado, tpPrincipal);
-        when(enderecoRepository.findById(id)).thenReturn(Optional.of(enderecoEntity));
+
+        Endereco enderecoEntity = createEnderecoIdLogradouroCepNumeroCidadeEstadoTipoPrincipalN();
+        when(enderecoRepository.findById(enderecoEntity.getId())).thenReturn(Optional.of(enderecoEntity));
         when( enderecoRepository.save(enderecoEntity)).thenReturn(enderecoEntity);
 
         org.junit.jupiter.api.Assertions.assertEquals(enderecoEntity.getId(),enderecoService.defineEnderecoPrincipal(1L).getId());
@@ -256,80 +238,43 @@ public class EnderecoServiceTest {
     @Test
     public void saveAll_Sucessful() {
         // Given
-        Pessoa pessoa = createTestPessoa();
+        Pessoa pessoa = createTestPessoaIdNomeDataNascimento();
         Long pessoaId = 1L;
         List<EnderecoDTO> enderecoDTOs = new ArrayList<>();
-        EnderecoSaveDTO enderecoSaveDTO1 = createTestEnderecoSaveDTO();
-        EnderecoSaveDTO enderecoSaveDTO2 = createTestEnderecoSaveDTO();
+        EnderecoSaveDTO enderecoSaveDTO1 = createEnderecoSaveDTOLogradouroCepNumeroCidadeEstadoTipoPrincipalN();
+        EnderecoSaveDTO enderecoSaveDTO2 = createEnderecoSaveDTOLogradouroCepNumeroCidadeEstadoTipoPrincipalN();
         Assertions.assertThat(enderecoService.saveAll(List.of(enderecoSaveDTO1, enderecoSaveDTO2), pessoa).containsAll(enderecoDTOs));
 
     }
 
-    private Pessoa createTestPessoa() {
-        java.sql.Date birthDate = DateUtils.parseDate("24/05/2000");
-        return new Pessoa(1L,"Gabriel Figueiredo",birthDate,List.of());
-    }
 
-    private EnderecoSaveDTO createTestEnderecoSaveDTO() {
-        String logradouro = "123 Main St";
-        String cep = "12345-678";
-        Integer numero = 10;
-        String cidade = "Cityville";
-        EstadoBrasil estado = EstadoBrasil.ACRE;
-        TipoPrincipal tpPrincipal = TipoPrincipal.N;
 
-        return new EnderecoSaveDTO(logradouro, cep, numero, cidade, tpPrincipal, estado);
-    }
-    private EnderecoSaveDTO createTestEnderecoSaveDTOTipoPrincipalS() {
-        String logradouro = "123 Main St";
-        String cep = "12345-678";
-        Integer numero = 10;
-        String cidade = "Cityville";
-        EstadoBrasil estado = EstadoBrasil.ACRE;
-        TipoPrincipal tpPrincipal = TipoPrincipal.S;
 
-        return new EnderecoSaveDTO(logradouro, cep, numero, cidade, tpPrincipal, estado);
-    }
+
     @Test
     public void updateEnderecos_ThrowEnderecoNotFoundException() {
-        // Set up test data
-        Long enderecoId = 1L;
-        String logradouro = "123 Main St";
-        String cep = "12345-678";
-        Integer numero = 10;
-        String cidade = "Cityville";
-        EstadoBrasil estado = EstadoBrasil.ACRE;
-        // Initialize address entity
-        Endereco saveEndereco = new Endereco(enderecoId, logradouro, cep, numero, cidade, estado, TipoPrincipal.N, PessoaConstant.PESSOA);
+        Pessoa pessoa = createTestPessoaIdNomeDataNascimento();
+        Endereco saveEndereco = createEnderecoIdLogradouroCepNumeroCidadeEstadoTipoPrincipalN();
+        saveEndereco.setPessoa(pessoa);
+        pessoa.setEnderecos(List.of(saveEndereco));
         List<Endereco> enderecos = new ArrayList<>();
         enderecos.add(saveEndereco);
-
-        // Expected Object
-        EnderecoDTO expectedEnderecoDTO = new EnderecoDTO(enderecoId, logradouro, cep, numero, cidade, TipoPrincipal.S, estado, PessoaConstant.PESSOA);
+        EnderecoDTO expectedEnderecoDTO = createEnderecoDTOLogradouroCepNumeroCidadeEstadoTipoPrincipalS(1L);
         List<EnderecoDTO> expectedResponse = List.of(expectedEnderecoDTO);
-
-        // Define behavior of the repository
-
-        // Call updateEnderecos method and get the response
         ThrowableAssert.ThrowingCallable callableUnderTestMethod = () -> enderecoService.updateEnderecos(expectedResponse);
-        // Then
         Assertions.assertThatThrownBy(callableUnderTestMethod).isInstanceOf(EnderecoNotFoundException.class);
 
     }
 
     @Test
     public void updateEnderecos_Sucessfull() {
-        Long enderecoId = 1L;
-        String logradouro = "123 Main St";
-        String cep = "12345-678";
-        Integer numero = 10;
-        String cidade = "Cityville";
-        EstadoBrasil estado = EstadoBrasil.ACRE;
-        Endereco saveEndereco = new Endereco(enderecoId, logradouro, cep, numero, cidade, estado, TipoPrincipal.N, PessoaConstant.PESSOA);
-        EnderecoDTO dto = new EnderecoDTO(enderecoId, logradouro, cep, numero, cidade, TipoPrincipal.N, estado,PessoaConstant.PESSOA);
+        Pessoa pessoaEndereco = createTestPessoaIdNomeDataNascimento();
+        Endereco saveEndereco = createEnderecoIdLogradouroCepNumeroCidadeEstadoTipoPrincipalS();
+        saveEndereco.setPessoa(pessoaEndereco);
+        pessoaEndereco.setEnderecos(List.of(saveEndereco));
+        EnderecoDTO dto = createEnderecoDTOLogradouroCepNumeroCidadeEstadoTipoPrincipalS(1L);
         List<EnderecoDTO> dtos = new ArrayList<>();
         dtos.add(dto);
-
         when(enderecoRepository.findAllById(any())).thenReturn(List.of(saveEndereco));
         when(enderecoRepository.saveAll(List.of(saveEndereco))).thenReturn(List.of(saveEndereco));
         Assertions.assertThat(enderecoService.updateEnderecos(dtos).containsAll((List.of(saveEndereco))));
@@ -338,23 +283,14 @@ public class EnderecoServiceTest {
     }
     @Test
     public void validateExistingPrincipalThrowsEnderecoPrincipalFoundException() {
-        Pessoa pessoa = createTestPessoa();
+        Pessoa pessoa = createTestPessoaIdNomeDataNascimento();
         Long pessoaId = 1L;
         List<EnderecoDTO> enderecoDTOs = new ArrayList<>();
-        EnderecoSaveDTO enderecoSaveDTO1 = createTestEnderecoSaveDTOTipoPrincipalS();
-        EnderecoSaveDTO enderecoSaveDTO2 = createTestEnderecoSaveDTOTipoPrincipalS();
-        Long enderecoId = 1L;
-        String logradouro = "123 Main St";
-        String cep = "12345-678";
-        Integer numero = 10;
-        String cidade = "Cityville";
-        EstadoBrasil estado = EstadoBrasil.ACRE;
-        Endereco saveEndereco = new Endereco(enderecoId, logradouro, cep, numero, cidade, estado, TipoPrincipal.S, pessoa);
-
+        EnderecoSaveDTO enderecoSaveDTO1 = createEnderecoSaveDTOLogradouroCepNumeroCidadeEstadoTipoPrincipalS();
+        EnderecoSaveDTO enderecoSaveDTO2 = createEnderecoSaveDTOLogradouroCepNumeroCidadeEstadoTipoPrincipalS();
+        Endereco saveEndereco = createEnderecoIdLogradouroCepNumeroCidadeEstadoTipoPrincipalSPessoaParamater(pessoa);
         when(enderecoRepository.findEnderecoByTpPrincipalSim(1L)).thenReturn(Optional.of(saveEndereco));
-
         ThrowableAssert.ThrowingCallable callableUnderTestMethod = () -> enderecoService.saveAll(List.of(enderecoSaveDTO1, enderecoSaveDTO2), pessoa);
-        // Then
         Assertions.assertThatThrownBy(callableUnderTestMethod).isInstanceOf(EnderecoPrincipalFoundException.class);
 
     }

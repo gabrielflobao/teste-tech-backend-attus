@@ -23,8 +23,7 @@ public class EnderecoDTO {
 
     private TipoPrincipal tpPrincipal;
     private EstadoBrasil estado;
-    @JsonIgnore
-    private Pessoa pessoa;
+
     public EnderecoDTO () {
 
     }
@@ -33,7 +32,7 @@ public class EnderecoDTO {
                        String logradouro,
                        String cep, Integer numero
             , String cidade,
-                       TipoPrincipal tpPrincipal, EstadoBrasil estado,Pessoa pessoa) {
+                       TipoPrincipal tpPrincipal, EstadoBrasil estado) {
         this.id = id;
         this.logradouro = logradouro;
         this.cep = cep;
@@ -41,7 +40,6 @@ public class EnderecoDTO {
         this.cidade = cidade;
         this.tpPrincipal = tpPrincipal;
         this.estado = estado;
-        this.pessoa=pessoa;
     }
 
     public String getLogradouro() {
@@ -90,14 +88,6 @@ public class EnderecoDTO {
 
     public void setEstado(EstadoBrasil estado) {
         this.estado = estado;
-    }
-
-    public Pessoa getPessoa() {
-        return pessoa;
-    }
-
-    public void setPessoa(Pessoa pessoa) {
-        this.pessoa = pessoa;
     }
 
     public Long getId() {

@@ -5,13 +5,13 @@ import com.br.teste.attus.dto.EnderecoSaveDTO;
 import com.br.teste.attus.entity.Endereco;
 import com.br.teste.attus.entity.Pessoa;
 import com.br.teste.attus.enuns.TipoPrincipal;
-import com.br.teste.attus.exceptions.endereco.EnderecoExistenteException;
 import com.br.teste.attus.exceptions.endereco.EnderecoNotFoundException;
 import com.br.teste.attus.exceptions.endereco.EnderecoPrincipalFoundException;
 import com.br.teste.attus.exceptions.endereco.EnderecoPrincipalNotFound;
 import com.br.teste.attus.exceptions.pessoa.PessoaNotFoundException;
 import com.br.teste.attus.exceptions.utils.ExceptionUtils;
-import com.br.teste.attus.mapper.EnderecoMapper;
+import com.br.teste.attus.mapper.EnderecoRequestMapper;
+import com.br.teste.attus.mapper.EnderecoResponseMapper;
 import com.br.teste.attus.mapper.EnderecoSaveMapper;
 import com.br.teste.attus.repository.EnderecoRepository;
 import com.br.teste.attus.repository.PessoaRepository;
@@ -53,33 +53,33 @@ public class EnderecoService {
         });
         ExceptionUtils.checkListEmptyExceptionWithMsg(enderecosSalvar, new EnderecoNotFoundException("Não há endereços para salvar",
                 "Não existem endereços para salvar"));
-        return EnderecoMapper.toReponseList(repository.saveAll(enderecosSalvar));
+        return EnderecoResponseMapper.toReponseList(repository.saveAll(enderecosSalvar));
 
     }
 
     public EnderecoDTO update(EnderecoDTO endereco) {
-        Endereco entity = EnderecoMapper.toRequest(endereco);
-        return EnderecoMapper.toReponse(repository.save(entity));
+        Endereco entity = EnderecoRequestMapper.toRequest(endereco);
+        return EnderecoResponseMapper.toReponse(repository.save(entity));
     }
 
     public List<EnderecoDTO> findAll() {
         List<Endereco> list = repository.findAll();
         ExceptionUtils.checkListEmptyExceptionWithMsg(list, new EnderecoNotFoundException("Não existe endereços",
                 "Não existe endereços cadastrados"));
-        return EnderecoMapper.toReponseList(list);
+        return EnderecoResponseMapper.toReponseList(list);
     }
 
     public EnderecoDTO findById(Long id) {
         Endereco entity = repository.findById(id)
                 .orElseThrow(() -> new EnderecoNotFoundException("Endereço não existe", "Código do endereço informado não existe"));
-        return EnderecoMapper.toReponse(entity);
+        return EnderecoResponseMapper.toReponse(entity);
     }
 
     public List<EnderecoDTO> findAllById(List<Long> id) {
         List<Endereco> entitys = repository.findAllById(id);
         ExceptionUtils.checkListEmptyExceptionWithMsg(entitys, new EnderecoNotFoundException("Endereço não encontrado", "Endereço referente ao id mencionado não foi encontrado"));
 
-        return EnderecoMapper.toReponseList(entitys);
+        return EnderecoResponseMapper.toReponseList(entitys);
     }
 
     public List<EnderecoDTO> findByPessoaId(Long id) {
@@ -88,7 +88,7 @@ public class EnderecoService {
                 new EnderecoNotFoundException("Endereço não encontrado",
                         "Endereço não encontrado referente ao ID pessoa informado"));
 
-        return EnderecoMapper.toReponseList(lista);
+        return EnderecoResponseMapper.toReponseList(lista);
     }
 
     public EnderecoDTO defineEnderecoPrincipal(Long id) {
@@ -111,7 +111,7 @@ public class EnderecoService {
                 }
         );
         Endereco endereco = enderecoRef.get();
-        return EnderecoMapper.toReponse(endereco);
+        return EnderecoResponseMapper.toReponse(endereco);
     }
 
 
@@ -122,7 +122,7 @@ public class EnderecoService {
                         "Não existe endereço principal no ID pessoa informado"));
 
         endereco.setTpPrincipal(TipoPrincipal.N);
-        return EnderecoMapper.toReponse(repository.save(endereco));
+        return EnderecoResponseMapper.toReponse(repository.save(endereco));
     }
 
     public List<EnderecoDTO> updateEnderecos(List<EnderecoDTO> enderecosDTO) {
@@ -170,7 +170,7 @@ public class EnderecoService {
     }
 
     private List<EnderecoDTO> mapearEnderecosParaDTO(List<Endereco> enderecos) {
-        return EnderecoMapper.toReponseList(enderecos);
+        return EnderecoResponseMapper.toReponseList(enderecos);
     }
 
     private void validateExistingPrincipal(EnderecoSaveDTO addressDTO, EnderecoRepository repository, Pessoa pessoa) {
