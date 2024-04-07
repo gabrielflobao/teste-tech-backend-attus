@@ -35,6 +35,11 @@ Uma pessoa deve possuir os seguintes dados: 
 -> Cidade
 
 -> Estado</p>
+
+<p>
+    <h1>Estimativa de testes</h1>
+    Arquivo que contém as estimativas de teste se encontra na pasta htmlReport -> index.html.
+</p>
         </section>
         <section>
             <h2>Depedências</h2>
