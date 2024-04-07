@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
-  <title>Coverage Report > ExceptionUtils</title>
+  <title>Coverage Report > EnderecoRepository</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -19,55 +19,28 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">com.br.teste.attus.exceptions.utils</a>
+    <a href="../index.html">com.br.teste.attus.repository</a>
 </div>
 
-<h1>Coverage Summary for Class: ExceptionUtils (com.br.teste.attus.exceptions.utils)</h1>
+<h1>Coverage Summary for Class: EnderecoRepository (com.br.teste.attus.repository)</h1>
 
 <table class="coverageStats">
+
 <tr>
   <th class="name">Class</th>
-<th class="coverageStat 
-">
-  Class, %
-</th>
-<th class="coverageStat 
-">
-  Method, %
-</th>
-<th class="coverageStat 
-">
-  Line, %
-</th>
 </tr>
+  <tr>
+    <td class="name">EnderecoRepository$MockitoMock$0Xo16smf</td>
+  </tr>
+  <tr>
+    <td class="name">EnderecoRepository$MockitoMock$0Xo16smf$auxiliary$iLpXWSNI</td>
+  </tr>
+  <tr>
+    <td class="name">EnderecoRepository$MockitoMock$0Xo16smf$auxiliary$V82g8UJJ</td>
+  </tr>
 <tr>
-  <td class="name">ExceptionUtils</td>
-<td class="coverageStat">
-  <span class="percent">
-    100%
-  </span>
-  <span class="absValue">
-    (1/1)
-  </span>
-</td>
-<td class="coverageStat">
-  <span class="percent">
-    50%
-  </span>
-  <span class="absValue">
-    (1/2)
-  </span>
-</td>
-<td class="coverageStat">
-  <span class="percent">
-    66,7%
-  </span>
-  <span class="absValue">
-    (2/3)
-  </span>
-</td>
+  <td class="name"><strong>Total</strong></td>
 </tr>
-
 </table>
 
 <br/>
@@ -75,21 +48,37 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package com.br.teste.attus.exceptions.utils;
+<code class="sourceCode" id="sourceCode">&nbsp;package com.br.teste.attus.repository;
 &nbsp;
-&nbsp;import com.br.teste.attus.exceptions.AbstractException;
-&nbsp;import com.br.teste.attus.exceptions.endereco.EnderecoNotFoundException;
+&nbsp;import com.br.teste.attus.dto.EnderecoDTO;
+&nbsp;import com.br.teste.attus.entity.Endereco;
+&nbsp;import com.br.teste.attus.entity.Pessoa;
+&nbsp;import com.br.teste.attus.enuns.TipoPrincipal;
+&nbsp;import org.springframework.data.jpa.repository.JpaRepository;
+&nbsp;import org.springframework.data.jpa.repository.Query;
+&nbsp;import org.springframework.data.repository.query.Param;
+&nbsp;import org.springframework.stereotype.Repository;
 &nbsp;
 &nbsp;import java.util.List;
 &nbsp;import java.util.Optional;
+&nbsp;/**
+&nbsp; * Author : Gabriel F F Lobão
+&nbsp; */
+&nbsp;@Repository
+&nbsp;public interface EnderecoRepository extends JpaRepository&lt;Endereco,Long&gt; {
 &nbsp;
-<b class="nc">&nbsp;public class ExceptionUtils {</b>
-&nbsp;    public static void checkListEmptyExceptionWithMsg(List&lt;?&gt; empty, AbstractException ex) {
-<b class="fc">&nbsp;        if (empty==null||empty.isEmpty()) {</b>
-<b class="fc">&nbsp;            throw ex;</b>
-&nbsp;        }
-&nbsp;    }
+&nbsp;    List&lt;Endereco&gt; findByPessoaId(Long id);
 &nbsp;
+&nbsp;    @Query(&quot;SELECT t FROM Endereco t where t.pessoa.id= :param  &quot;)
+&nbsp;    Optional&lt;Endereco&gt; existePrincipalEndereco(@Param(&quot;param&quot;) Long id);
+&nbsp;    @Query(&quot;SELECT t FROM Endereco t where t.pessoa.id = :id and t.tpPrincipal = :sn&quot;)
+&nbsp;    Optional&lt;Endereco&gt; findPrincipalEndereco(@Param(&quot;id&quot;) Long id,@Param(&quot;sn&quot;) TipoPrincipal sn);
+&nbsp;
+&nbsp;    @Query(&quot;select p.enderecos FROM Pessoa p where p.id=(SELECT t.pessoa.id FROM Endereco t where t.id = :id) &quot;)
+&nbsp;    List&lt;Endereco&gt; findPessoasEndecerosByIdEndereco(@Param(&quot;id&quot;) Long id);
+&nbsp;     @Query(&quot;SELECT t FROM Endereco t where t.pessoa.id = :id and t.tpPrincipal = &#39;S&#39; &quot;)
+&nbsp;    Optional&lt;Endereco&gt; findEnderecoByTpPrincipalSim(@Param(&quot;id&quot;) Long id);
+&nbsp;    List&lt;Endereco&gt; findEnderecoByPessoaId(Long id);
 &nbsp;
 &nbsp;}
 </code>
@@ -115,7 +104,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-04-07 15:56</div>
+    <div style="float:right;">generated on 2024-04-07 16:46</div>
 </div>
 </body>
 </html>

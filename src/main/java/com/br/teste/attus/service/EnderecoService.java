@@ -98,7 +98,10 @@ public class EnderecoService {
         opEndereco.ifPresentOrElse(
                 endereco -> {
                     enderecoRef.set(endereco);
-                    Optional<Endereco> opEnderecoPrincipal = repository.findEnderecoByTpPrincipalSim(id);
+                    List<Endereco> enderecos = repository.findPessoasEndecerosByIdEndereco(id);
+                    Optional<Endereco> opEnderecoPrincipal = enderecos.stream()
+                            .filter( end -> end.getTpPrincipal().equals(TipoPrincipal.S))
+                            .findFirst();
                     if (opEnderecoPrincipal.isPresent()) {
                         throw new EnderecoPrincipalFoundException("Endereço principal existente", "Endereço definido como principal já existe");
                     } else {
@@ -176,7 +179,7 @@ public class EnderecoService {
     private void validateExistingPrincipal(EnderecoSaveDTO addressDTO, EnderecoRepository repository, Pessoa pessoa) {
         Optional<Endereco> existingPrincipal = repository.findEnderecoByTpPrincipalSim(pessoa.getId());
         if (existingPrincipal.isPresent() && addressDTO.getTpPrincipal().equals(TipoPrincipal.S)) {
-            String errorMessage = "Existe endereço principal para esta pessoa :" + pessoa.getNomeCompleto() + "id:" + pessoa.getId();
+            String errorMessage = "Existe endereço principal para esta pessoa :" + pessoa.getNomeCompleto() + " , id:" + pessoa.getId();
             throw new EnderecoPrincipalFoundException("Já existe endereço principal", errorMessage);
         }
     }

@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
-  <title>Coverage Report > EnderecoController</title>
+  <title>Coverage Report > EnderecoDTO</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -19,10 +19,10 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">com.br.teste.attus.controller</a>
+    <a href="../index.html">com.br.teste.attus.dto</a>
 </div>
 
-<h1>Coverage Summary for Class: EnderecoController (com.br.teste.attus.controller)</h1>
+<h1>Coverage Summary for Class: EnderecoDTO (com.br.teste.attus.dto)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -41,7 +41,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">EnderecoController</td>
+  <td class="name">EnderecoDTO</td>
 <td class="coverageStat">
   <span class="percent">
     100%
@@ -55,7 +55,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (8/8)
+    (17/17)
   </span>
 </td>
 <td class="coverageStat">
@@ -63,7 +63,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (11/11)
+    (24/24)
   </span>
 </td>
 </tr>
@@ -75,82 +75,110 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package com.br.teste.attus.controller;
+<code class="sourceCode" id="sourceCode">&nbsp;package com.br.teste.attus.dto;
 &nbsp;
-&nbsp;import com.br.teste.attus.dto.EnderecoDTO;
-&nbsp;import com.br.teste.attus.dto.EnderecoSaveDTO;
-&nbsp;import com.br.teste.attus.service.EnderecoService;
-&nbsp;import io.swagger.v3.oas.annotations.Operation;
-&nbsp;import jakarta.websocket.server.PathParam;
-&nbsp;import org.springframework.beans.factory.annotation.Autowired;
-&nbsp;import org.springframework.http.HttpStatus;
-&nbsp;import org.springframework.http.ResponseEntity;
-&nbsp;import org.springframework.web.bind.annotation.*;
-&nbsp;
-&nbsp;import java.util.List;
+&nbsp;import com.br.teste.attus.entity.Pessoa;
+&nbsp;import com.br.teste.attus.enuns.EstadoBrasil;
+&nbsp;import com.br.teste.attus.enuns.TipoPrincipal;
+&nbsp;import com.fasterxml.jackson.annotation.JsonBackReference;
+&nbsp;import com.fasterxml.jackson.annotation.JsonIgnore;
+&nbsp;import org.apache.commons.lang3.builder.EqualsBuilder;
 &nbsp;
 &nbsp;/**
 &nbsp; * Author : Gabriel F F Lobão
 &nbsp; */
-&nbsp;@RestController
-&nbsp;@RequestMapping(&quot;/endereco&quot;)
-<b class="fc">&nbsp;public class EnderecoController {</b>
-&nbsp;    @Autowired
-&nbsp;    private EnderecoService service;
+&nbsp;public class EnderecoDTO {
 &nbsp;
-&nbsp;    @Operation(summary = &quot;Realiza a listagem de endereço(s).&quot;, method = &quot;GET&quot;)
-&nbsp;    @GetMapping(&quot;/listar&quot;)
-&nbsp;    public ResponseEntity&lt;List&lt;EnderecoDTO&gt;&gt; listaEnderecos() {
-<b class="fc">&nbsp;        List&lt;EnderecoDTO&gt; enderecos = service.findAll();</b>
-<b class="fc">&nbsp;        return ResponseEntity.ok(enderecos);</b>
-&nbsp;    }
-&nbsp;    @Operation(summary = &quot;Busca endereço pelo ID pessoa.&quot;, method = &quot;GET&quot;)
-&nbsp;    @GetMapping(&quot;/listar/pessoa/{id}&quot;)
-&nbsp;    public ResponseEntity&lt;List&lt;EnderecoDTO&gt;&gt; findEnderecosPorPessoa(@PathVariable(&quot;id&quot;) Long id) {
-<b class="fc">&nbsp;        List&lt;EnderecoDTO&gt; endereco = service.findByPessoaId(id);</b>
-<b class="fc">&nbsp;        return ResponseEntity.ok(endereco);</b>
-&nbsp;    }
+&nbsp;    private Long id;
+&nbsp;    private String logradouro;
 &nbsp;
-&nbsp;    @Operation(summary = &quot;Busca endereços pelos ID(s)&quot; +
-&nbsp;            &quot;.&quot;, method = &quot;GET&quot;)
-&nbsp;    @GetMapping(&quot;/listar/&quot;)
-&nbsp;    public ResponseEntity&lt;List&lt;EnderecoDTO&gt;&gt; buscarEnderecosPorIds(@RequestParam (name = &quot;ids&quot;) List&lt;Long&gt; ids) {
-<b class="fc">&nbsp;        List&lt;EnderecoDTO&gt; enderecos = service.findAllById(ids);</b>
-<b class="fc">&nbsp;        return ResponseEntity.ok(enderecos);</b>
-&nbsp;    }
+&nbsp;    private String cep;
 &nbsp;
-&nbsp;    @Operation(summary = &quot;Cadastrar endereços por meio do ID pessoa&quot; +
-&nbsp;            &quot;.&quot;, method = &quot;PUT&quot;)
-&nbsp;    @PutMapping(&quot;/cadastrar/pessoa/{id}&quot;)
-&nbsp;    public ResponseEntity&lt;List&lt;EnderecoDTO&gt;&gt; cadastrarEnderecos(@PathVariable(&quot;id&quot;) Long id, @RequestBody List&lt;EnderecoSaveDTO&gt; cadastroEnderecos) {
-<b class="fc">&nbsp;        return ResponseEntity.status(HttpStatus.CREATED).body(service.saveAllByIdPessoa(id, cadastroEnderecos));</b>
-&nbsp;    }
+&nbsp;    private Integer numero;
 &nbsp;
-&nbsp;    @Operation(summary = &quot;Define endereço principal&quot; +
-&nbsp;            &quot;.&quot;, method = &quot;PUT&quot;)
-&nbsp;    @PutMapping(value = &quot;/principal/{id}&quot;)
-&nbsp;    public ResponseEntity&lt;EnderecoDTO&gt; definirEnderecoPrincipal(@PathVariable(&quot;id&quot;) Long id) {
-<b class="fc">&nbsp;        return ResponseEntity.ok(service.defineEnderecoPrincipal(id));</b>
+&nbsp;    private String cidade;
+&nbsp;
+&nbsp;    private TipoPrincipal tpPrincipal;
+&nbsp;    private EstadoBrasil estado;
+&nbsp;
+<b class="fc">&nbsp;    public EnderecoDTO () {</b>
 &nbsp;
 &nbsp;    }
 &nbsp;
-&nbsp;    @Operation(summary = &quot;Altera endereco principal Pelo ID&quot; +
-&nbsp;            &quot;.&quot;, method = &quot;Patch&quot;)
-&nbsp;    @PutMapping(value = &quot;/update/principal/&quot;)
-&nbsp;    public ResponseEntity&lt;EnderecoDTO&gt; updateEnderecoPrincipalToN(@PathParam(&quot;id&quot;) Long id) {
-<b class="fc">&nbsp;        return ResponseEntity.ok(service.updateEnderecoPrincipalToN(id));</b>
-&nbsp;
+&nbsp;    public EnderecoDTO(Long id,
+&nbsp;                       String logradouro,
+&nbsp;                       String cep, Integer numero
+&nbsp;            , String cidade,
+<b class="fc">&nbsp;                       TipoPrincipal tpPrincipal, EstadoBrasil estado) {</b>
+<b class="fc">&nbsp;        this.id = id;</b>
+<b class="fc">&nbsp;        this.logradouro = logradouro;</b>
+<b class="fc">&nbsp;        this.cep = cep;</b>
+<b class="fc">&nbsp;        this.numero = numero;</b>
+<b class="fc">&nbsp;        this.cidade = cidade;</b>
+<b class="fc">&nbsp;        this.tpPrincipal = tpPrincipal;</b>
+<b class="fc">&nbsp;        this.estado = estado;</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Operation(summary = &quot;Altera Endereços&quot; +
-&nbsp;            &quot;.&quot;, method = &quot;PUT&quot;)
-&nbsp;    @PatchMapping(value = &quot;/update&quot;)
-&nbsp;    public ResponseEntity&lt;List&lt;EnderecoDTO&gt;&gt; updateEnderecos(@RequestBody List&lt;EnderecoDTO&gt; lista) {
-<b class="fc">&nbsp;        return ResponseEntity.ok(service.updateEnderecos(lista));</b>
-&nbsp;
+&nbsp;    public String getLogradouro() {
+<b class="fc">&nbsp;        return logradouro;</b>
 &nbsp;    }
 &nbsp;
+&nbsp;    public void setLogradouro(String logradouro) {
+<b class="fc">&nbsp;        this.logradouro = logradouro;</b>
+&nbsp;    }
 &nbsp;
+&nbsp;    public String getCep() {
+<b class="fc">&nbsp;        return cep;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setCep(String cep) {
+<b class="fc">&nbsp;        this.cep = cep;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Integer getNumero() {
+<b class="fc">&nbsp;        return numero;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setNumero(Integer numero) {
+<b class="fc">&nbsp;        this.numero = numero;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getCidade() {
+<b class="fc">&nbsp;        return cidade;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setCidade(String cidade) {
+<b class="fc">&nbsp;        this.cidade = cidade;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public TipoPrincipal getTpPrincipal() {
+<b class="fc">&nbsp;        return tpPrincipal;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setTpPrincipal(TipoPrincipal tpPrincipal) {
+<b class="fc">&nbsp;        this.tpPrincipal = tpPrincipal;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public EstadoBrasil getEstado() {
+<b class="fc">&nbsp;        return estado;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setEstado(EstadoBrasil estado) {
+<b class="fc">&nbsp;        this.estado = estado;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Long getId() {
+<b class="fc">&nbsp;        return id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setId(Long id) {
+<b class="fc">&nbsp;        this.id = id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean equals(Object obj) {
+<b class="fc">&nbsp;        return EqualsBuilder.reflectionEquals(obj,this);</b>
+&nbsp;    }
 &nbsp;}
 </code>
 </pre>
@@ -175,7 +203,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-04-07 15:56</div>
+    <div style="float:right;">generated on 2024-04-07 16:46</div>
 </div>
 </body>
 </html>

@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
-  <title>Coverage Report > AbstractException</title>
+  <title>Coverage Report > PessoaExceptionHandler</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -19,10 +19,10 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">com.br.teste.attus.exceptions</a>
+    <a href="../index.html">com.br.teste.attus.exceptions.pessoa</a>
 </div>
 
-<h1>Coverage Summary for Class: AbstractException (com.br.teste.attus.exceptions)</h1>
+<h1>Coverage Summary for Class: PessoaExceptionHandler (com.br.teste.attus.exceptions.pessoa)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -41,7 +41,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">AbstractException</td>
+  <td class="name">PessoaExceptionHandler</td>
 <td class="coverageStat">
   <span class="percent">
     100%
@@ -63,7 +63,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (3/3)
+    (2/2)
   </span>
 </td>
 </tr>
@@ -75,20 +75,27 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package com.br.teste.attus.exceptions;
+<code class="sourceCode" id="sourceCode">&nbsp;package com.br.teste.attus.exceptions.pessoa;
 &nbsp;
-&nbsp;public class AbstractException extends RuntimeException{
+&nbsp;import com.br.teste.attus.dto.ErrorDTO;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.web.bind.annotation.*;
 &nbsp;
-&nbsp;    private final String lancamento;
+&nbsp;/**
+&nbsp; * Author : Gabriel F F Lobão
+&nbsp; */
+&nbsp;@RestControllerAdvice
+<b class="fc">&nbsp;public class PessoaExceptionHandler {</b>
 &nbsp;
-&nbsp;    public AbstractException(String message, String lancamento) {
-<b class="fc">&nbsp;        super(message);</b>
-<b class="fc">&nbsp;        this.lancamento = lancamento;</b>
+&nbsp;    @ResponseStatus(HttpStatus.NOT_FOUND)
+&nbsp;    @ResponseBody
+&nbsp;    @ExceptionHandler(PessoaNotFoundException.class)
+&nbsp;    public ErrorDTO hander(PessoaNotFoundException ex) {
+<b class="fc">&nbsp;        return new ErrorDTO(ex.getMessage(),ex.getLancamento());</b>
+&nbsp;
 &nbsp;    }
 &nbsp;
-&nbsp;    public String getLancamento() {
-<b class="fc">&nbsp;        return lancamento;</b>
-&nbsp;    }
+&nbsp;
 &nbsp;}
 </code>
 </pre>
@@ -113,7 +120,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-04-07 15:56</div>
+    <div style="float:right;">generated on 2024-04-07 16:46</div>
 </div>
 </body>
 </html>

@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
-  <title>Coverage Report > PessoaNotFoundException</title>
+  <title>Coverage Report > PessoaService</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -19,10 +19,10 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">com.br.teste.attus.exceptions.pessoa</a>
+    <a href="../index.html">com.br.teste.attus.service</a>
 </div>
 
-<h1>Coverage Summary for Class: PessoaNotFoundException (com.br.teste.attus.exceptions.pessoa)</h1>
+<h1>Coverage Summary for Class: PessoaService (com.br.teste.attus.service)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -41,7 +41,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">PessoaNotFoundException</td>
+  <td class="name">PessoaService</td>
 <td class="coverageStat">
   <span class="percent">
     100%
@@ -52,18 +52,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    100%
+    88,9%
   </span>
   <span class="absValue">
-    (1/1)
+    (16/18)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    100%
+    78,2%
   </span>
   <span class="absValue">
-    (1/1)
+    (43/55)
   </span>
 </td>
 </tr>
@@ -75,14 +75,152 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package com.br.teste.attus.exceptions.pessoa;
+<code class="sourceCode" id="sourceCode">&nbsp;package com.br.teste.attus.service;
 &nbsp;
-&nbsp;import com.br.teste.attus.exceptions.AbstractException;
+&nbsp;import com.br.teste.attus.dto.EnderecoDTO;
+&nbsp;import com.br.teste.attus.dto.PessoaSaveDTO;
+&nbsp;import com.br.teste.attus.entity.Endereco;
+&nbsp;import com.br.teste.attus.enuns.TipoPrincipal;
+&nbsp;import com.br.teste.attus.exceptions.endereco.EnderecoPrincipalFoundException;
+&nbsp;import com.br.teste.attus.exceptions.pessoa.PessoaNotFoundException;
+&nbsp;import com.br.teste.attus.exceptions.utils.ExceptionUtils;
+&nbsp;import com.br.teste.attus.mapper.*;
+&nbsp;import com.br.teste.attus.repository.PessoaRepository;
+&nbsp;import com.br.teste.attus.dto.PessoaDTO;
+&nbsp;import com.br.teste.attus.entity.Pessoa;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.stereotype.Service;
 &nbsp;
-&nbsp;public class PessoaNotFoundException extends AbstractException {
+&nbsp;import java.util.List;
+&nbsp;import java.util.Objects;
+&nbsp;import java.util.stream.Collectors;
 &nbsp;
-&nbsp;    public PessoaNotFoundException(String message, String lancamento) {
-<b class="fc">&nbsp;        super(message, lancamento);</b>
+&nbsp;/**
+&nbsp; * Author : Gabriel F F Lobão
+&nbsp; */
+&nbsp;@Service
+<b class="fc">&nbsp;public class PessoaService {</b>
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private PessoaRepository repository;
+&nbsp;
+&nbsp;    public PessoaSaveDTO save(PessoaSaveDTO pessoa) {
+<b class="fc">&nbsp;        Pessoa pessoas = PessoaSaveRequestMapper.toRequestSave(pessoa);</b>
+<b class="fc">&nbsp;        return PessoaSaveResponseMapper.toResponse(repository.save(pessoas));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;PessoaSaveDTO&gt; saveLista(List&lt;PessoaSaveDTO&gt; pessoa) {
+<b class="fc">&nbsp;        List&lt;Pessoa&gt; pessoaSave = PessoaSaveRequestMapper.toRequestSaveList(pessoa);</b>
+<b class="fc">&nbsp;        if (verificaPessoaEnderecoPrincipal(pessoaSave)) {</b>
+<b class="nc">&nbsp;            throw new EnderecoPrincipalFoundException(&quot;Existe mais de um endereço principal&quot;, &quot;Existe mais de um endereço principal para a pessoa a ser cadastrada&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return PessoaSaveResponseMapper.toResponseList(repository.saveAll(pessoaSave));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private boolean verificaPessoaEnderecoPrincipal(List&lt;Pessoa&gt; pessoas) {
+<b class="fc">&nbsp;        boolean existe = false;</b>
+<b class="fc">&nbsp;        for (Pessoa pessoa : pessoas) {</b>
+<b class="fc">&nbsp;            if(pessoa.getEnderecos() !=null) {</b>
+<b class="nc">&nbsp;                existe = verificaMaisDeUmEnderecoPrincipal(pessoa.getEnderecos());</b>
+&nbsp;            }
+<b class="fc">&nbsp;            if (existe) {</b>
+<b class="nc">&nbsp;                return existe;</b>
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        return existe;</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    private boolean verificaMaisDeUmEnderecoPrincipal(List&lt;Endereco&gt; enderecos) {
+<b class="nc">&nbsp;        Integer qtdEndPrincipal = 0;</b>
+<b class="nc">&nbsp;        for (Endereco endereco : enderecos) {</b>
+<b class="nc">&nbsp;            if (endereco.getTpPrincipal().equals(TipoPrincipal.S)) {</b>
+<b class="nc">&nbsp;                qtdEndPrincipal++;</b>
+&nbsp;            }
+<b class="nc">&nbsp;            if (qtdEndPrincipal &gt; 1) {</b>
+<b class="nc">&nbsp;                return true;</b>
+&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;PessoaDTO&gt; findAll() {
+<b class="fc">&nbsp;        List&lt;Pessoa&gt; list = repository.findAll();</b>
+<b class="fc">&nbsp;        ExceptionUtils.checkListEmptyExceptionWithMsg(list, new PessoaNotFoundException(&quot;Nenhuma pessoa encontrada!&quot;,</b>
+&nbsp;                &quot;Não há pessoas cadastradas no sistema&quot;));
+<b class="fc">&nbsp;        return PessoaResponseMapper.toReponseList(list);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public PessoaDTO findById(Long id) {
+<b class="fc">&nbsp;        Pessoa entity = repository.findById(id)</b>
+<b class="fc">&nbsp;                .orElseThrow(() -&gt; new PessoaNotFoundException(&quot;Nenhuma pessoa encontrada!&quot;,</b>
+&nbsp;                        &quot;Não consta nenhuma pessoa com o ID informado&quot;));
+<b class="fc">&nbsp;        return PessoaResponseMapper.toReponse(entity);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;PessoaDTO&gt; findAllById(List&lt;Long&gt; id) {
+<b class="fc">&nbsp;        List&lt;Pessoa&gt; entitys = repository.findAllById(id);</b>
+<b class="fc">&nbsp;        ExceptionUtils.checkListEmptyExceptionWithMsg(entitys, new PessoaNotFoundException(&quot;Nenhuma pessoa encontrada!&quot;,</b>
+&nbsp;                &quot;Não há pessoas cadastradas no sistema&quot;));
+<b class="fc">&nbsp;        return PessoaResponseMapper.toReponseList(entitys);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean existsPessoaById(Long id) {
+<b class="fc">&nbsp;        return repository.existsById(id);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;PessoaDTO&gt; updatePessoas(List&lt;PessoaDTO&gt; pessoaDTOS) {
+<b class="fc">&nbsp;        List&lt;Long&gt; idsDasPessoasDTOS = extrairIdsDasPessoas(pessoaDTOS);</b>
+<b class="fc">&nbsp;        List&lt;Pessoa&gt; pessoasDoBanco = buscarPessoasPorIds(idsDasPessoasDTOS);</b>
+<b class="fc">&nbsp;        List&lt;Pessoa&gt; pessoasAtualizadas = atualizarPessoas(pessoasDoBanco, pessoaDTOS);</b>
+<b class="fc">&nbsp;        savePessoasNoBanco(pessoasAtualizadas);</b>
+<b class="fc">&nbsp;        ExceptionUtils.checkListEmptyExceptionWithMsg(pessoasAtualizadas, new PessoaNotFoundException(&quot;Nenhuma pessoa encontrada!&quot;,</b>
+&nbsp;                &quot;Não foram encontradas as pessoas para atualização&quot;));
+<b class="fc">&nbsp;        return mapearPesssoasParaDTO(pessoasAtualizadas);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private List&lt;PessoaDTO&gt; mapearPesssoasParaDTO(List&lt;Pessoa&gt; pessoasAtualizadas) {
+<b class="fc">&nbsp;        return PessoaResponseMapper.toReponseList(pessoasAtualizadas);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private List&lt;Long&gt; extrairIdsDasPessoas(List&lt;PessoaDTO&gt; pessoaDTOS) {
+<b class="fc">&nbsp;        return pessoaDTOS.stream()</b>
+<b class="fc">&nbsp;                .map(PessoaDTO::getId)</b>
+<b class="fc">&nbsp;                .collect(Collectors.toList());</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    private List&lt;Pessoa&gt; buscarPessoasPorIds(List&lt;Long&gt; pessoasIds) {
+<b class="fc">&nbsp;        return repository.findAllById(pessoasIds);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private List&lt;Pessoa&gt; atualizarPessoas(List&lt;Pessoa&gt; pessoasBanco, List&lt;PessoaDTO&gt; pessoaDTOS) {
+<b class="fc">&nbsp;        return pessoasBanco.stream()</b>
+<b class="fc">&nbsp;                .peek(pessoaBanco -&gt; atualizaPessoa(pessoaBanco, pessoaDTOS))</b>
+<b class="fc">&nbsp;                .collect(Collectors.toList());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void savePessoasNoBanco(List&lt;Pessoa&gt; pessoas) {
+<b class="fc">&nbsp;        repository.saveAll(pessoas);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void atualizaPessoa(Pessoa pessoaBanco, List&lt;PessoaDTO&gt; pessoaDTOS) {
+<b class="fc">&nbsp;        pessoaDTOS.stream()</b>
+<b class="fc">&nbsp;                .filter(pessoaDTO -&gt; Objects.equals(pessoaDTO.getId(), pessoaBanco.getId()))</b>
+<b class="fc">&nbsp;                .findFirst()</b>
+<b class="fc">&nbsp;                .ifPresent(pessoaDTO -&gt; {</b>
+<b class="fc">&nbsp;                    pessoaBanco.setNomeCompleto(Objects.requireNonNullElse(pessoaDTO.getNomeCompleto(), pessoaDTO.getNomeCompleto()));</b>
+<b class="fc">&nbsp;                    pessoaBanco.setDataNascimento(Objects.requireNonNullElse(pessoaDTO.getDataNascimento(), pessoaDTO.getDataNascimento()));</b>
+&nbsp;
+&nbsp;                });
+&nbsp;    }
+&nbsp;
+&nbsp;    private List&lt;EnderecoDTO&gt; mapearEnderecosParaDTO(List&lt;Endereco&gt; enderecos) {
+<b class="nc">&nbsp;        return EnderecoResponseMapper.toReponseList(enderecos);</b>
 &nbsp;    }
 &nbsp;}
 </code>
@@ -108,7 +246,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-04-07 15:56</div>
+    <div style="float:right;">generated on 2024-04-07 16:46</div>
 </div>
 </body>
 </html>

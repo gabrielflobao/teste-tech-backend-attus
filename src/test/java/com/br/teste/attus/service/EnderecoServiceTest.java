@@ -201,7 +201,7 @@ public class EnderecoServiceTest {
     public void defineEnderecoPrincipal_ThrowsEnderecoPrincipalFoundException_WhenPrincipalAddressAlreadyExists() {
         // Given
         when(enderecoRepository.findById(anyLong())).thenReturn(Optional.of(ENDERECO));
-        when(enderecoRepository.findEnderecoByTpPrincipalSim(anyLong())).thenReturn(Optional.of(ENDERECO));
+        when(enderecoRepository.findPessoasEndecerosByIdEndereco(anyLong())).thenReturn(List.of(ENDERECO));
         long pessoaId = ENDERECO.getId();
 
         // When

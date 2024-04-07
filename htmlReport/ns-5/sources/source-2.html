@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
-  <title>Coverage Report > TipoPrincipal</title>
+  <title>Coverage Report > EnderecoNotFoundException</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -19,10 +19,10 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">com.br.teste.attus.enuns</a>
+    <a href="../index.html">com.br.teste.attus.exceptions.endereco</a>
 </div>
 
-<h1>Coverage Summary for Class: TipoPrincipal (com.br.teste.attus.enuns)</h1>
+<h1>Coverage Summary for Class: EnderecoNotFoundException (com.br.teste.attus.exceptions.endereco)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -41,7 +41,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">TipoPrincipal</td>
+  <td class="name">EnderecoNotFoundException</td>
 <td class="coverageStat">
   <span class="percent">
     100%
@@ -52,18 +52,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    60%
+    100%
   </span>
   <span class="absValue">
-    (3/5)
+    (1/1)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    66,7%
+    100%
   </span>
   <span class="absValue">
-    (4/6)
+    (1/1)
   </span>
 </td>
 </tr>
@@ -75,37 +75,14 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package com.br.teste.attus.enuns;
+<code class="sourceCode" id="sourceCode">&nbsp;package com.br.teste.attus.exceptions.endereco;
 &nbsp;
-&nbsp;import jakarta.persistence.Column;
-&nbsp;import jakarta.persistence.Entity;
-&nbsp;import jakarta.persistence.Id;
+&nbsp;import com.br.teste.attus.exceptions.AbstractException;
 &nbsp;
-&nbsp;/**
-&nbsp; * Author : Gabriel F F Lobão
-&nbsp; */
-&nbsp;
-<b class="fc">&nbsp;public enum TipoPrincipal {</b>
-&nbsp;
-<b class="fc">&nbsp;    S(&quot;S&quot;),N(&quot;N&quot;);</b>
-&nbsp;
-&nbsp;    @Id
-&nbsp;    private Long id;
-<b class="fc">&nbsp;    TipoPrincipal(String descricao) {</b>
-<b class="fc">&nbsp;        this.descricao = descricao;</b>
+&nbsp;public class EnderecoNotFoundException extends AbstractException {
+&nbsp;    public EnderecoNotFoundException(String message, String lancamento) {
+<b class="fc">&nbsp;        super(message, lancamento);</b>
 &nbsp;    }
-&nbsp;
-&nbsp;    public void setId(Long id) {
-<b class="nc">&nbsp;        this.id = id;</b>
-&nbsp;    }
-&nbsp;
-&nbsp;    public Long getId() {
-<b class="nc">&nbsp;        return id;</b>
-&nbsp;    }
-&nbsp;
-&nbsp;    private String descricao;
-&nbsp;
-&nbsp;
 &nbsp;}
 </code>
 </pre>
@@ -130,7 +107,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-04-07 15:56</div>
+    <div style="float:right;">generated on 2024-04-07 16:46</div>
 </div>
 </body>
 </html>

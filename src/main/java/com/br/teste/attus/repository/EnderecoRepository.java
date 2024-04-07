@@ -24,9 +24,10 @@ public interface EnderecoRepository extends JpaRepository<Endereco,Long> {
     @Query("SELECT t FROM Endereco t where t.pessoa.id = :id and t.tpPrincipal = :sn")
     Optional<Endereco> findPrincipalEndereco(@Param("id") Long id,@Param("sn") TipoPrincipal sn);
 
-    @Query("SELECT t FROM Endereco t where t.pessoa.id = :id and t.tpPrincipal = 'S' ")
+    @Query("select p.enderecos FROM Pessoa p where p.id=(SELECT t.pessoa.id FROM Endereco t where t.id = :id) ")
+    List<Endereco> findPessoasEndecerosByIdEndereco(@Param("id") Long id);
+     @Query("SELECT t FROM Endereco t where t.pessoa.id = :id and t.tpPrincipal = 'S' ")
     Optional<Endereco> findEnderecoByTpPrincipalSim(@Param("id") Long id);
-
     List<Endereco> findEnderecoByPessoaId(Long id);
 
 }
