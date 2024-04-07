@@ -49,7 +49,7 @@ public class EnderecoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.saveAllByIdPessoa(id, cadastroEnderecos));
     }
 
-    @Operation(summary = "Define endereço principal" +
+    @Operation(summary = "Define endereço principal por meio do ID endereço" +
             ".", method = "PUT")
     @PutMapping(value = "/principal/{id}")
     public ResponseEntity<EnderecoDTO> definirEnderecoPrincipal(@PathVariable("id") Long id) {
@@ -57,8 +57,8 @@ public class EnderecoController {
 
     }
 
-    @Operation(summary = "Altera endereco principal Pelo ID" +
-            ".", method = "Patch")
+    @Operation(summary = "Altera endereço principal para N por meio do ID endereço" +
+            ".", method = "PATCH")
     @PutMapping(value = "/update/principal/")
     public ResponseEntity<EnderecoDTO> updateEnderecoPrincipalToN(@PathParam("id") Long id) {
         return ResponseEntity.ok(service.updateEnderecoPrincipalToN(id));

@@ -99,14 +99,14 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    @Autowired
 &nbsp;    private PessoaService pessoaService;
 &nbsp;
-&nbsp;    @Operation(summary = &quot;Lista pessoas&quot; +
+&nbsp;    @Operation(summary = &quot;Lista pessoa(s)&quot; +
 &nbsp;            &quot;.&quot;,method = &quot;GET&quot;)
 &nbsp;    @GetMapping(&quot;/listar&quot;)
 &nbsp;    public ResponseEntity&lt;List&lt;PessoaDTO&gt;&gt; getListPessoas() {
 <b class="fc">&nbsp;        List&lt;PessoaDTO&gt; pessoas = pessoaService.findAll();</b>
 <b class="fc">&nbsp;        return ResponseEntity.ok(pessoas);</b>
 &nbsp;    }
-&nbsp;    @Operation(summary = &quot;Busca pessoa pelo ID&quot; +
+&nbsp;    @Operation(summary = &quot;Buscar pessoa(s) pelo ID(s)&quot; +
 &nbsp;            &quot;.&quot;,method = &quot;GET&quot;)
 &nbsp;    @GetMapping(&quot;/listar/&quot;)
 &nbsp;    public ResponseEntity&lt;List&lt;PessoaDTO&gt;&gt; getListPessoasById(@RequestParam(&quot;ids&quot;) List&lt;Long&gt; ids) {
@@ -121,8 +121,8 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        return ResponseEntity.status(HttpStatus.CREATED).body(response);</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Operation(summary = &quot;Altera Endereços&quot; +
-&nbsp;            &quot;.&quot;, method = &quot;PUT&quot;)
+&nbsp;    @Operation(summary = &quot;Alterar endereços por meio da Pessoa&quot; +
+&nbsp;            &quot;.&quot;, method = &quot;PATCH&quot;)
 &nbsp;    @PatchMapping(value = &quot;/update&quot;)
 &nbsp;    public ResponseEntity&lt;List&lt;PessoaDTO&gt;&gt; updatePessoas(@RequestBody List&lt;PessoaDTO&gt; lista) {
 <b class="fc">&nbsp;        return ResponseEntity.ok(pessoaService.updatePessoas(lista));</b>
@@ -154,7 +154,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-04-07 16:46</div>
+    <div style="float:right;">generated on 2024-04-07 17:14</div>
 </div>
 </body>
 </html>

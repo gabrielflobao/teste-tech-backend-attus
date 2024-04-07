@@ -22,14 +22,14 @@ public class PessoaController {
     @Autowired
     private PessoaService pessoaService;
 
-    @Operation(summary = "Lista pessoas" +
+    @Operation(summary = "Lista pessoa(s)" +
             ".",method = "GET")
     @GetMapping("/listar")
     public ResponseEntity<List<PessoaDTO>> getListPessoas() {
         List<PessoaDTO> pessoas = pessoaService.findAll();
         return ResponseEntity.ok(pessoas);
     }
-    @Operation(summary = "Busca pessoa pelo ID" +
+    @Operation(summary = "Buscar pessoa(s) pelo ID(s)" +
             ".",method = "GET")
     @GetMapping("/listar/")
     public ResponseEntity<List<PessoaDTO>> getListPessoasById(@RequestParam("ids") List<Long> ids) {
@@ -44,8 +44,8 @@ public class PessoaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @Operation(summary = "Altera Endereços" +
-            ".", method = "PUT")
+    @Operation(summary = "Alterar endereços por meio da Pessoa" +
+            ".", method = "PATCH")
     @PatchMapping(value = "/update")
     public ResponseEntity<List<PessoaDTO>> updatePessoas(@RequestBody List<PessoaDTO> lista) {
         return ResponseEntity.ok(pessoaService.updatePessoas(lista));

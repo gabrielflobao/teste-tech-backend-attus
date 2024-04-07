@@ -126,7 +126,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        return ResponseEntity.status(HttpStatus.CREATED).body(service.saveAllByIdPessoa(id, cadastroEnderecos));</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Operation(summary = &quot;Define endereço principal&quot; +
+&nbsp;    @Operation(summary = &quot;Define endereço principal por meio do ID endereço&quot; +
 &nbsp;            &quot;.&quot;, method = &quot;PUT&quot;)
 &nbsp;    @PutMapping(value = &quot;/principal/{id}&quot;)
 &nbsp;    public ResponseEntity&lt;EnderecoDTO&gt; definirEnderecoPrincipal(@PathVariable(&quot;id&quot;) Long id) {
@@ -134,8 +134,8 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;    }
 &nbsp;
-&nbsp;    @Operation(summary = &quot;Altera endereco principal Pelo ID&quot; +
-&nbsp;            &quot;.&quot;, method = &quot;Patch&quot;)
+&nbsp;    @Operation(summary = &quot;Altera endereço principal para N por meio do ID endereço&quot; +
+&nbsp;            &quot;.&quot;, method = &quot;PATCH&quot;)
 &nbsp;    @PutMapping(value = &quot;/update/principal/&quot;)
 &nbsp;    public ResponseEntity&lt;EnderecoDTO&gt; updateEnderecoPrincipalToN(@PathParam(&quot;id&quot;) Long id) {
 <b class="fc">&nbsp;        return ResponseEntity.ok(service.updateEnderecoPrincipalToN(id));</b>
@@ -175,7 +175,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-04-07 16:46</div>
+    <div style="float:right;">generated on 2024-04-07 17:14</div>
 </div>
 </body>
 </html>

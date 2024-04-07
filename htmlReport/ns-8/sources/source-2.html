@@ -37,6 +37,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 <th class="coverageStat 
 ">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
   Line, %
 </th>
 </tr>
@@ -52,18 +56,26 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    88,9%
+    94,4%
   </span>
   <span class="absValue">
-    (16/18)
+    (17/18)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    78,2%
+    100%
   </span>
   <span class="absValue">
-    (43/55)
+    (14/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    98,2%
+  </span>
+  <span class="absValue">
+    (54/55)
   </span>
 </td>
 </tr>
@@ -112,7 +124,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    public List&lt;PessoaSaveDTO&gt; saveLista(List&lt;PessoaSaveDTO&gt; pessoa) {
 <b class="fc">&nbsp;        List&lt;Pessoa&gt; pessoaSave = PessoaSaveRequestMapper.toRequestSaveList(pessoa);</b>
 <b class="fc">&nbsp;        if (verificaPessoaEnderecoPrincipal(pessoaSave)) {</b>
-<b class="nc">&nbsp;            throw new EnderecoPrincipalFoundException(&quot;Existe mais de um endereço principal&quot;, &quot;Existe mais de um endereço principal para a pessoa a ser cadastrada&quot;);</b>
+<b class="fc">&nbsp;            throw new EnderecoPrincipalFoundException(&quot;Existe mais de um endereço principal&quot;, &quot;Existe mais de um endereço principal para a pessoa a ser cadastrada&quot;);</b>
 &nbsp;        }
 &nbsp;
 <b class="fc">&nbsp;        return PessoaSaveResponseMapper.toResponseList(repository.saveAll(pessoaSave));</b>
@@ -122,10 +134,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        boolean existe = false;</b>
 <b class="fc">&nbsp;        for (Pessoa pessoa : pessoas) {</b>
 <b class="fc">&nbsp;            if(pessoa.getEnderecos() !=null) {</b>
-<b class="nc">&nbsp;                existe = verificaMaisDeUmEnderecoPrincipal(pessoa.getEnderecos());</b>
+<b class="fc">&nbsp;                existe = verificaMaisDeUmEnderecoPrincipal(pessoa.getEnderecos());</b>
 &nbsp;            }
 <b class="fc">&nbsp;            if (existe) {</b>
-<b class="nc">&nbsp;                return existe;</b>
+<b class="fc">&nbsp;                return existe;</b>
 &nbsp;            }
 <b class="fc">&nbsp;        }</b>
 &nbsp;
@@ -134,16 +146,16 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    private boolean verificaMaisDeUmEnderecoPrincipal(List&lt;Endereco&gt; enderecos) {
-<b class="nc">&nbsp;        Integer qtdEndPrincipal = 0;</b>
-<b class="nc">&nbsp;        for (Endereco endereco : enderecos) {</b>
-<b class="nc">&nbsp;            if (endereco.getTpPrincipal().equals(TipoPrincipal.S)) {</b>
-<b class="nc">&nbsp;                qtdEndPrincipal++;</b>
+<b class="fc">&nbsp;        Integer qtdEndPrincipal = 0;</b>
+<b class="fc">&nbsp;        for (Endereco endereco : enderecos) {</b>
+<b class="fc">&nbsp;            if (endereco.getTpPrincipal().equals(TipoPrincipal.S)) {</b>
+<b class="fc">&nbsp;                qtdEndPrincipal++;</b>
 &nbsp;            }
-<b class="nc">&nbsp;            if (qtdEndPrincipal &gt; 1) {</b>
-<b class="nc">&nbsp;                return true;</b>
+<b class="fc">&nbsp;            if (qtdEndPrincipal &gt; 1) {</b>
+<b class="fc">&nbsp;                return true;</b>
 &nbsp;            }
-<b class="nc">&nbsp;        }</b>
-<b class="nc">&nbsp;        return false;</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return false;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public List&lt;PessoaDTO&gt; findAll() {
@@ -246,7 +258,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-04-07 16:46</div>
+    <div style="float:right;">generated on 2024-04-07 17:14</div>
 </div>
 </body>
 </html>

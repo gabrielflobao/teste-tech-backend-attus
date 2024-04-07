@@ -1,9 +1,15 @@
 package com.br.teste.attus.service;
 
+import com.br.teste.attus.commons.EnderecoConstant;
+import com.br.teste.attus.dto.EnderecoDTO;
+import com.br.teste.attus.dto.EnderecoSaveDTO;
 import com.br.teste.attus.dto.PessoaDTO;
 import com.br.teste.attus.dto.PessoaSaveDTO;
+import com.br.teste.attus.entity.Endereco;
 import com.br.teste.attus.entity.Pessoa;
+import com.br.teste.attus.exceptions.endereco.EnderecoPrincipalFoundException;
 import com.br.teste.attus.exceptions.pessoa.PessoaNotFoundException;
+import com.br.teste.attus.mapper.EnderecoSaveResponseMapper;
 import com.br.teste.attus.mapper.PessoaResponseMapper;
 import com.br.teste.attus.mapper.PessoaSaveResponseMapper;
 import com.br.teste.attus.repository.PessoaRepository;
@@ -46,6 +52,22 @@ class PessoaServiceTest {
         List<Pessoa> pessoas = List.of(createTestPessoaIdNomeDataNascimento());
         List<PessoaSaveDTO> pessoasDTO = List.of(PessoaSaveResponseMapper.toResponse(createTestPessoaIdNomeDataNascimento()));
         assertThat(pessoaService.saveLista(pessoasDTO).containsAll(pessoasDTO));
+    }
+    @Test
+    void createPessoas_Failed_MaisDeUmEndereçoPrincipal() {
+        List<PessoaSaveDTO> pessoa =PessoaSaveResponseMapper.toResponseList(List.of(createTestPessoaIdNomeDataNascimento()));
+        EnderecoSaveDTO endereco = EnderecoConstant.createEnderecoSaveDTOLogradouroCepNumeroCidadeEstadoTipoPrincipalS();
+        pessoa.get(0).setEnderecos(List.of(endereco,endereco));
+        Assertions.assertThatThrownBy(() -> pessoaService.saveLista(pessoa)).isInstanceOf(EnderecoPrincipalFoundException.class);
+    }
+    @Test
+    void createPessoas_MaisDeUmEndereco_Sucessfull() {
+        List<PessoaSaveDTO> pessoa =PessoaSaveResponseMapper.toResponseList(List.of(createTestPessoaIdNomeDataNascimento()));
+        EnderecoSaveDTO endereco = EnderecoConstant.createEnderecoSaveDTOLogradouroCepNumeroCidadeEstadoTipoPrincipalS();
+        EnderecoSaveDTO endereco2 = EnderecoConstant.createEnderecoSaveDTOLogradouroCepNumeroCidadeEstadoTipoPrincipalN();
+
+        pessoa.get(0).setEnderecos(List.of(endereco,endereco2));
+        assertThat(pessoaService.saveLista(pessoa).containsAll(List.of(endereco,endereco2)));
     }
 
     @Test
@@ -107,4 +129,5 @@ class PessoaServiceTest {
         List<PessoaDTO> result = pessoaService.updatePessoas(PessoaResponseMapper.toReponseList(pessoasLista));
         Assertions.assertThat(result.containsAll(List.of(pessoaAlterada)));
     }
+
 }
