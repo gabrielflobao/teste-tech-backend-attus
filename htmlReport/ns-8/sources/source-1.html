@@ -52,18 +52,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    25%
+    100%
   </span>
   <span class="absValue">
-    (1/4)
+    (2/2)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    25%
+    100%
   </span>
   <span class="absValue">
-    (1/4)
+    (2/2)
   </span>
 </td>
 </tr>
@@ -89,25 +89,9 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;    @ResponseStatus(HttpStatus.NOT_FOUND)
 &nbsp;    @ResponseBody
-&nbsp;    @ExceptionHandler(PessoaInexistenteException.class)
-&nbsp;    public ErrorDTO hander(PessoaInexistenteException ex) {
-<b class="nc">&nbsp;        return new ErrorDTO(ex.getMessage(),ex.getLancamento());</b>
-&nbsp;
-&nbsp;    }
-&nbsp;
-&nbsp;    @ResponseStatus(HttpStatus.SEE_OTHER)
-&nbsp;    @ResponseBody
-&nbsp;    @ExceptionHandler(PessoaExistenteException.class)
-&nbsp;    public ErrorDTO hander(PessoaExistenteException ex) {
-<b class="nc">&nbsp;        return new ErrorDTO(ex.getMessage(),ex.getLancamento());</b>
-&nbsp;
-&nbsp;    }
-&nbsp;
-&nbsp;    @ResponseStatus(HttpStatus.NOT_FOUND)
-&nbsp;    @ResponseBody
 &nbsp;    @ExceptionHandler(PessoaNotFoundException.class)
 &nbsp;    public ErrorDTO hander(PessoaNotFoundException ex) {
-<b class="nc">&nbsp;        return new ErrorDTO(ex.getMessage(),ex.getLancamento());</b>
+<b class="fc">&nbsp;        return new ErrorDTO(ex.getMessage(),ex.getLancamento());</b>
 &nbsp;
 &nbsp;    }
 &nbsp;
@@ -136,7 +120,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-04-01 18:52</div>
+    <div style="float:right;">generated on 2024-04-07 15:56</div>
 </div>
 </body>
 </html>

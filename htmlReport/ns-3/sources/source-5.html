@@ -1,0 +1,169 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > PessoaSaveDTO</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.br.teste.attus.dto</a>
+</div>
+
+<h1>Coverage Summary for Class: PessoaSaveDTO (com.br.teste.attus.dto)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PessoaSaveDTO</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (8/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    53,3%
+  </span>
+  <span class="absValue">
+    (8/15)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.br.teste.attus.dto;
+&nbsp;
+&nbsp;import com.fasterxml.jackson.annotation.JsonFormat;
+&nbsp;import org.apache.commons.lang3.builder.EqualsBuilder;
+&nbsp;import org.springframework.format.annotation.DateTimeFormat;
+&nbsp;
+&nbsp;import java.sql.Date;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;public class PessoaSaveDTO {
+&nbsp;    private String nomeCompleto;
+&nbsp;    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+&nbsp;    @JsonFormat(pattern = &quot;dd/MM/yyyy&quot;)
+&nbsp;    private Date dataNascimento;
+&nbsp;
+&nbsp;    private List&lt;EnderecoSaveDTO&gt; enderecos;
+&nbsp;
+<b class="nc">&nbsp;    public PessoaSaveDTO(String nomeCompleto, Date dataNascimento) {</b>
+&nbsp;
+<b class="nc">&nbsp;        this.nomeCompleto = nomeCompleto;</b>
+<b class="nc">&nbsp;        this.dataNascimento = dataNascimento;</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    public PessoaSaveDTO(String nomeCompleto, Date dataNascimento, List&lt;EnderecoSaveDTO&gt; enderecos) {</b>
+<b class="nc">&nbsp;        this.nomeCompleto = nomeCompleto;</b>
+<b class="nc">&nbsp;        this.dataNascimento = dataNascimento;</b>
+<b class="nc">&nbsp;        this.enderecos = enderecos;</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    public PessoaSaveDTO() {</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    public String getNomeCompleto() {
+<b class="fc">&nbsp;        return nomeCompleto;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setNomeCompleto(String nomeCompleto) {
+<b class="fc">&nbsp;        this.nomeCompleto = nomeCompleto;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Date getDataNascimento() {
+<b class="fc">&nbsp;        return dataNascimento;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setDataNascimento(Date dataNascimento) {
+<b class="fc">&nbsp;        this.dataNascimento = dataNascimento;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;EnderecoSaveDTO&gt; getEnderecos() {
+<b class="fc">&nbsp;        return enderecos;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setEnderecos(List&lt;EnderecoSaveDTO&gt; enderecos) {
+<b class="fc">&nbsp;        this.enderecos = enderecos;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean equals(Object obj) {
+<b class="fc">&nbsp;        return EqualsBuilder.reflectionEquals(obj,this);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-04-07 15:56</div>
+</div>
+</body>
+</html>

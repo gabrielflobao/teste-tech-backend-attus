@@ -82,14 +82,14 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import com.br.teste.attus.entity.Endereco;
 &nbsp;import com.br.teste.attus.entity.Pessoa;
 &nbsp;import com.br.teste.attus.enuns.TipoPrincipal;
-&nbsp;import com.br.teste.attus.exceptions.endereco.EnderecoExistenteException;
 &nbsp;import com.br.teste.attus.exceptions.endereco.EnderecoNotFoundException;
 &nbsp;import com.br.teste.attus.exceptions.endereco.EnderecoPrincipalFoundException;
 &nbsp;import com.br.teste.attus.exceptions.endereco.EnderecoPrincipalNotFound;
 &nbsp;import com.br.teste.attus.exceptions.pessoa.PessoaNotFoundException;
 &nbsp;import com.br.teste.attus.exceptions.utils.ExceptionUtils;
-&nbsp;import com.br.teste.attus.mapper.EnderecoMapper;
-&nbsp;import com.br.teste.attus.mapper.EnderecoSaveMapper;
+&nbsp;import com.br.teste.attus.mapper.EnderecoRequestMapper;
+&nbsp;import com.br.teste.attus.mapper.EnderecoResponseMapper;
+&nbsp;import com.br.teste.attus.mapper.EnderecoSaveRequestMapper;
 &nbsp;import com.br.teste.attus.repository.EnderecoRepository;
 &nbsp;import com.br.teste.attus.repository.PessoaRepository;
 &nbsp;import org.springframework.beans.factory.annotation.Autowired;
@@ -126,37 +126,37 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        List&lt;Endereco&gt; enderecosSalvar = new ArrayList&lt;Endereco&gt;();</b>
 <b class="fc">&nbsp;        endereco.forEach(enderecoDTO -&gt; {</b>
 <b class="fc">&nbsp;            validateExistingPrincipal(enderecoDTO, repository, pessoa);</b>
-<b class="fc">&nbsp;            enderecosSalvar.add(EnderecoSaveMapper.toRequest(enderecoDTO, pessoa));</b>
+<b class="fc">&nbsp;            enderecosSalvar.add(EnderecoSaveRequestMapper.toRequest(enderecoDTO, pessoa));</b>
 &nbsp;        });
 <b class="fc">&nbsp;        ExceptionUtils.checkListEmptyExceptionWithMsg(enderecosSalvar, new EnderecoNotFoundException(&quot;Não há endereços para salvar&quot;,</b>
 &nbsp;                &quot;Não existem endereços para salvar&quot;));
-<b class="fc">&nbsp;        return EnderecoMapper.toReponseList(repository.saveAll(enderecosSalvar));</b>
+<b class="fc">&nbsp;        return EnderecoResponseMapper.toReponseList(repository.saveAll(enderecosSalvar));</b>
 &nbsp;
 &nbsp;    }
 &nbsp;
 &nbsp;    public EnderecoDTO update(EnderecoDTO endereco) {
-<b class="nc">&nbsp;        Endereco entity = EnderecoMapper.toRequest(endereco);</b>
-<b class="nc">&nbsp;        return EnderecoMapper.toReponse(repository.save(entity));</b>
+<b class="nc">&nbsp;        Endereco entity = EnderecoRequestMapper.toRequest(endereco);</b>
+<b class="nc">&nbsp;        return EnderecoResponseMapper.toReponse(repository.save(entity));</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public List&lt;EnderecoDTO&gt; findAll() {
 <b class="fc">&nbsp;        List&lt;Endereco&gt; list = repository.findAll();</b>
 <b class="fc">&nbsp;        ExceptionUtils.checkListEmptyExceptionWithMsg(list, new EnderecoNotFoundException(&quot;Não existe endereços&quot;,</b>
 &nbsp;                &quot;Não existe endereços cadastrados&quot;));
-<b class="nc">&nbsp;        return EnderecoMapper.toReponseList(list);</b>
+<b class="nc">&nbsp;        return EnderecoResponseMapper.toReponseList(list);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public EnderecoDTO findById(Long id) {
 <b class="fc">&nbsp;        Endereco entity = repository.findById(id)</b>
 <b class="fc">&nbsp;                .orElseThrow(() -&gt; new EnderecoNotFoundException(&quot;Endereço não existe&quot;, &quot;Código do endereço informado não existe&quot;));</b>
-<b class="nc">&nbsp;        return EnderecoMapper.toReponse(entity);</b>
+<b class="nc">&nbsp;        return EnderecoResponseMapper.toReponse(entity);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public List&lt;EnderecoDTO&gt; findAllById(List&lt;Long&gt; id) {
 <b class="fc">&nbsp;        List&lt;Endereco&gt; entitys = repository.findAllById(id);</b>
 <b class="fc">&nbsp;        ExceptionUtils.checkListEmptyExceptionWithMsg(entitys, new EnderecoNotFoundException(&quot;Endereço não encontrado&quot;, &quot;Endereço referente ao id mencionado não foi encontrado&quot;));</b>
 &nbsp;
-<b class="nc">&nbsp;        return EnderecoMapper.toReponseList(entitys);</b>
+<b class="nc">&nbsp;        return EnderecoResponseMapper.toReponseList(entitys);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public List&lt;EnderecoDTO&gt; findByPessoaId(Long id) {
@@ -165,7 +165,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;                new EnderecoNotFoundException(&quot;Endereço não encontrado&quot;,
 &nbsp;                        &quot;Endereço não encontrado referente ao ID pessoa informado&quot;));
 &nbsp;
-<b class="fc">&nbsp;        return EnderecoMapper.toReponseList(lista);</b>
+<b class="fc">&nbsp;        return EnderecoResponseMapper.toReponseList(lista);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public EnderecoDTO defineEnderecoPrincipal(Long id) {
@@ -188,7 +188,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;                }
 &nbsp;        );
 <b class="fc">&nbsp;        Endereco endereco = enderecoRef.get();</b>
-<b class="fc">&nbsp;        return EnderecoMapper.toReponse(endereco);</b>
+<b class="fc">&nbsp;        return EnderecoResponseMapper.toReponse(endereco);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;
@@ -199,7 +199,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;                        &quot;Não existe endereço principal no ID pessoa informado&quot;));
 &nbsp;
 <b class="fc">&nbsp;        endereco.setTpPrincipal(TipoPrincipal.N);</b>
-<b class="fc">&nbsp;        return EnderecoMapper.toReponse(repository.save(endereco));</b>
+<b class="fc">&nbsp;        return EnderecoResponseMapper.toReponse(repository.save(endereco));</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public List&lt;EnderecoDTO&gt; updateEnderecos(List&lt;EnderecoDTO&gt; enderecosDTO) {
@@ -247,7 +247,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    private List&lt;EnderecoDTO&gt; mapearEnderecosParaDTO(List&lt;Endereco&gt; enderecos) {
-<b class="fc">&nbsp;        return EnderecoMapper.toReponseList(enderecos);</b>
+<b class="fc">&nbsp;        return EnderecoResponseMapper.toReponseList(enderecos);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    private void validateExistingPrincipal(EnderecoSaveDTO addressDTO, EnderecoRepository repository, Pessoa pessoa) {
@@ -295,7 +295,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-04-01 18:52</div>
+    <div style="float:right;">generated on 2024-04-07 15:56</div>
 </div>
 </body>
 </html>

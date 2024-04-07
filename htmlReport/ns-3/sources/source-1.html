@@ -52,18 +52,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    84,2%
+    100%
   </span>
   <span class="absValue">
-    (16/19)
+    (17/17)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    88,9%
+    100%
   </span>
   <span class="absValue">
-    (24/27)
+    (24/24)
   </span>
 </td>
 </tr>
@@ -100,8 +100,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;    private TipoPrincipal tpPrincipal;
 &nbsp;    private EstadoBrasil estado;
-&nbsp;    @JsonIgnore
-&nbsp;    private Pessoa pessoa;
+&nbsp;
 <b class="fc">&nbsp;    public EnderecoDTO () {</b>
 &nbsp;
 &nbsp;    }
@@ -110,7 +109,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;                       String logradouro,
 &nbsp;                       String cep, Integer numero
 &nbsp;            , String cidade,
-<b class="fc">&nbsp;                       TipoPrincipal tpPrincipal, EstadoBrasil estado,Pessoa pessoa) {</b>
+<b class="fc">&nbsp;                       TipoPrincipal tpPrincipal, EstadoBrasil estado) {</b>
 <b class="fc">&nbsp;        this.id = id;</b>
 <b class="fc">&nbsp;        this.logradouro = logradouro;</b>
 <b class="fc">&nbsp;        this.cep = cep;</b>
@@ -118,7 +117,6 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        this.cidade = cidade;</b>
 <b class="fc">&nbsp;        this.tpPrincipal = tpPrincipal;</b>
 <b class="fc">&nbsp;        this.estado = estado;</b>
-<b class="fc">&nbsp;        this.pessoa=pessoa;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public String getLogradouro() {
@@ -169,14 +167,6 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        this.estado = estado;</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    public Pessoa getPessoa() {
-<b class="nc">&nbsp;        return pessoa;</b>
-&nbsp;    }
-&nbsp;
-&nbsp;    public void setPessoa(Pessoa pessoa) {
-<b class="nc">&nbsp;        this.pessoa = pessoa;</b>
-&nbsp;    }
-&nbsp;
 &nbsp;    public Long getId() {
 <b class="fc">&nbsp;        return id;</b>
 &nbsp;    }
@@ -187,7 +177,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;    @Override
 &nbsp;    public boolean equals(Object obj) {
-<b class="nc">&nbsp;        return EqualsBuilder.reflectionEquals(obj,this);</b>
+<b class="fc">&nbsp;        return EqualsBuilder.reflectionEquals(obj,this);</b>
 &nbsp;    }
 &nbsp;}
 </code>
@@ -213,7 +203,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-04-01 18:52</div>
+    <div style="float:right;">generated on 2024-04-07 15:56</div>
 </div>
 </body>
 </html>

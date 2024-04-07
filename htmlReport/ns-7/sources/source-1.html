@@ -52,18 +52,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    20%
+    100%
   </span>
   <span class="absValue">
-    (1/5)
+    (4/4)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    20%
+    100%
   </span>
   <span class="absValue">
-    (1/5)
+    (4/4)
   </span>
 </td>
 </tr>
@@ -87,19 +87,12 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;@RestControllerAdvice
 <b class="fc">&nbsp;public class EnderecoExceptionHandler {</b>
 &nbsp;
-&nbsp;    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-&nbsp;    @ResponseBody
-&nbsp;    @ExceptionHandler(EnderecoExistenteException.class)
-&nbsp;    public ErrorDTO hander(EnderecoExistenteException ex) {
-<b class="nc">&nbsp;        return new ErrorDTO(ex.getMessage(),ex.getLancamento());</b>
-&nbsp;
-&nbsp;    }
 &nbsp;
 &nbsp;    @ResponseStatus(HttpStatus.NOT_FOUND)
 &nbsp;    @ResponseBody
 &nbsp;    @ExceptionHandler(EnderecoNotFoundException.class)
 &nbsp;    public ErrorDTO hander(EnderecoNotFoundException ex) {
-<b class="nc">&nbsp;        return new ErrorDTO(ex.getMessage(),ex.getLancamento());</b>
+<b class="fc">&nbsp;        return new ErrorDTO(ex.getMessage(),ex.getLancamento());</b>
 &nbsp;
 &nbsp;    }
 &nbsp;
@@ -107,7 +100,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    @ResponseBody
 &nbsp;    @ExceptionHandler(EnderecoPrincipalFoundException.class)
 &nbsp;    public ErrorDTO hander(EnderecoPrincipalFoundException ex) {
-<b class="nc">&nbsp;        return new ErrorDTO(ex.getMessage(),ex.getLancamento());</b>
+<b class="fc">&nbsp;        return new ErrorDTO(ex.getMessage(),ex.getLancamento());</b>
 &nbsp;
 &nbsp;    }
 &nbsp;
@@ -115,7 +108,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    @ResponseBody
 &nbsp;    @ExceptionHandler(EnderecoPrincipalNotFound.class)
 &nbsp;    public ErrorDTO hander(EnderecoPrincipalNotFound ex) {
-<b class="nc">&nbsp;        return new ErrorDTO(ex.getMessage(),ex.getLancamento());</b>
+<b class="fc">&nbsp;        return new ErrorDTO(ex.getMessage(),ex.getLancamento());</b>
 &nbsp;
 &nbsp;    }
 &nbsp;}
@@ -142,7 +135,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-04-01 18:52</div>
+    <div style="float:right;">generated on 2024-04-07 15:56</div>
 </div>
 </body>
 </html>

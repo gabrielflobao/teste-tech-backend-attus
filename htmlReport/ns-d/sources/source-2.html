@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
-  <title>Coverage Report > PessoaRepository</title>
+  <title>Coverage Report > EnderecoRepository</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -22,7 +22,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">com.br.teste.attus.repository</a>
 </div>
 
-<h1>Coverage Summary for Class: PessoaRepository (com.br.teste.attus.repository)</h1>
+<h1>Coverage Summary for Class: EnderecoRepository (com.br.teste.attus.repository)</h1>
 
 <table class="coverageStats">
 
@@ -30,13 +30,13 @@ Current scope:     <a href="../../index.html">all classes</a>
   <th class="name">Class</th>
 </tr>
   <tr>
-    <td class="name">PessoaRepository$MockitoMock$f8LkIgmK</td>
+    <td class="name">EnderecoRepository$MockitoMock$FKTbEEwq</td>
   </tr>
   <tr>
-    <td class="name">PessoaRepository$MockitoMock$f8LkIgmK$auxiliary$1LBLnahH</td>
+    <td class="name">EnderecoRepository$MockitoMock$FKTbEEwq$auxiliary$0dFHCCuL</td>
   </tr>
   <tr>
-    <td class="name">PessoaRepository$MockitoMock$f8LkIgmK$auxiliary$vGcFxbDE</td>
+    <td class="name">EnderecoRepository$MockitoMock$FKTbEEwq$auxiliary$2kU0fj4e</td>
   </tr>
 <tr>
   <td class="name"><strong>Total</strong></td>
@@ -50,19 +50,35 @@ Current scope:     <a href="../../index.html">all classes</a>
 <pre>
 <code class="sourceCode" id="sourceCode">&nbsp;package com.br.teste.attus.repository;
 &nbsp;
+&nbsp;import com.br.teste.attus.dto.EnderecoDTO;
+&nbsp;import com.br.teste.attus.entity.Endereco;
 &nbsp;import com.br.teste.attus.entity.Pessoa;
+&nbsp;import com.br.teste.attus.enuns.TipoPrincipal;
 &nbsp;import org.springframework.data.jpa.repository.JpaRepository;
+&nbsp;import org.springframework.data.jpa.repository.Query;
+&nbsp;import org.springframework.data.repository.query.Param;
 &nbsp;import org.springframework.stereotype.Repository;
 &nbsp;
-&nbsp;import javax.swing.text.html.Option;
 &nbsp;import java.util.List;
 &nbsp;import java.util.Optional;
 &nbsp;/**
 &nbsp; * Author : Gabriel F F Lobão
 &nbsp; */
 &nbsp;@Repository
+&nbsp;public interface EnderecoRepository extends JpaRepository&lt;Endereco,Long&gt; {
 &nbsp;
-&nbsp;public interface PessoaRepository extends JpaRepository&lt;Pessoa,Long&gt; {
+&nbsp;    List&lt;Endereco&gt; findByPessoaId(Long id);
+&nbsp;
+&nbsp;    @Query(&quot;SELECT t FROM Endereco t where t.pessoa.id= :param  &quot;)
+&nbsp;    Optional&lt;Endereco&gt; existePrincipalEndereco(@Param(&quot;param&quot;) Long id);
+&nbsp;    @Query(&quot;SELECT t FROM Endereco t where t.pessoa.id = :id and t.tpPrincipal = :sn&quot;)
+&nbsp;    Optional&lt;Endereco&gt; findPrincipalEndereco(@Param(&quot;id&quot;) Long id,@Param(&quot;sn&quot;) TipoPrincipal sn);
+&nbsp;
+&nbsp;    @Query(&quot;SELECT t FROM Endereco t where t.pessoa.id = :id and t.tpPrincipal = &#39;S&#39; &quot;)
+&nbsp;    Optional&lt;Endereco&gt; findEnderecoByTpPrincipalSim(@Param(&quot;id&quot;) Long id);
+&nbsp;
+&nbsp;    List&lt;Endereco&gt; findEnderecoByPessoaId(Long id);
+&nbsp;
 &nbsp;}
 </code>
 </pre>
@@ -87,7 +103,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-04-01 18:52</div>
+    <div style="float:right;">generated on 2024-04-07 15:56</div>
 </div>
 </body>
 </html>

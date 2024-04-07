@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
-  <title>Coverage Report > PessoaMapper</title>
+  <title>Coverage Report > EnderecoSaveRequestMapper</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -22,7 +22,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">com.br.teste.attus.mapper</a>
 </div>
 
-<h1>Coverage Summary for Class: PessoaMapper (com.br.teste.attus.mapper)</h1>
+<h1>Coverage Summary for Class: EnderecoSaveRequestMapper (com.br.teste.attus.mapper)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -41,7 +41,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">PessoaMapper</td>
+  <td class="name">EnderecoSaveRequestMapper</td>
 <td class="coverageStat">
   <span class="percent">
     100%
@@ -52,18 +52,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    71,4%
+    33,3%
   </span>
   <span class="absValue">
-    (5/7)
+    (1/3)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    63%
+    69,2%
   </span>
   <span class="absValue">
-    (17/27)
+    (9/13)
   </span>
 </td>
 </tr>
@@ -78,67 +78,33 @@ Current scope:     <a href="../../index.html">all classes</a>
 <code class="sourceCode" id="sourceCode">&nbsp;package com.br.teste.attus.mapper;
 &nbsp;
 &nbsp;import com.br.teste.attus.dto.EnderecoDTO;
-&nbsp;import com.br.teste.attus.dto.PessoaDTO;
+&nbsp;import com.br.teste.attus.dto.EnderecoSaveDTO;
 &nbsp;import com.br.teste.attus.entity.Endereco;
 &nbsp;import com.br.teste.attus.entity.Pessoa;
-&nbsp;
-&nbsp;import java.util.ArrayList;
 &nbsp;import java.util.List;
 &nbsp;import java.util.stream.Collectors;
 &nbsp;
-&nbsp;/**
-&nbsp; * Author : Gabriel F F Lobão
-&nbsp; */
-<b class="nc">&nbsp;public class PessoaMapper {</b>
+<b class="nc">&nbsp;public class EnderecoSaveRequestMapper {</b>
 &nbsp;
-&nbsp;    public static PessoaDTO toReponse(Pessoa object) {
-<b class="fc">&nbsp;        if (object != null) {</b>
-<b class="fc">&nbsp;            PessoaDTO dto = new PessoaDTO();</b>
-<b class="fc">&nbsp;            dto.setId(object.getId());</b>
-<b class="fc">&nbsp;            dto.setNomeCompleto(object.getNomeCompleto());</b>
-<b class="fc">&nbsp;            dto.setDataNascimento(object.getDataNascimento());</b>
-<b class="fc">&nbsp;            dto.setEnderecos(EnderecoMapper.toReponseList(object.getEnderecos()));</b>
-<b class="fc">&nbsp;            return dto;</b>
-&nbsp;        }
-<b class="nc">&nbsp;        return new PessoaDTO();</b>
+&nbsp;    public static List&lt;Endereco&gt; toRequestListSave(List&lt;EnderecoSaveDTO&gt; enderecos, Pessoa pessoa) {
+&nbsp;
+<b class="nc">&nbsp;        return enderecos.stream()</b>
+<b class="nc">&nbsp;                .map(endereco -&gt; EnderecoSaveRequestMapper.toRequest(endereco, pessoa))</b>
+<b class="nc">&nbsp;                .collect(Collectors.toList());</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    public static List&lt;PessoaDTO&gt; toReponseList(List&lt;Pessoa&gt; list) {
-<b class="fc">&nbsp;        return list.stream().map(PessoaMapper::toReponse).collect(Collectors.toList());</b>
-&nbsp;    }
 &nbsp;
-&nbsp;    public static Pessoa toRequest(PessoaDTO object) {
-<b class="fc">&nbsp;        Pessoa entity = new Pessoa();</b>
-<b class="fc">&nbsp;        entity.setId(object.getId());</b>
-<b class="fc">&nbsp;        entity.setNomeCompleto(object.getNomeCompleto());</b>
-<b class="fc">&nbsp;        entity.setDataNascimento(object.getDataNascimento());</b>
-<b class="fc">&nbsp;        if (object.getEnderecos() != null) {</b>
-<b class="nc">&nbsp;            entity.setEnderecos(EnderecoMapper.toRequestListSave(object.getEnderecos(), entity));</b>
-&nbsp;        }
+&nbsp;
+&nbsp;    public static Endereco toRequest(EnderecoSaveDTO object,Pessoa pessoa) {
+<b class="fc">&nbsp;        Endereco entity = new Endereco();</b>
+<b class="fc">&nbsp;        entity.setLogradouro(object.getLogradouro());</b>
+<b class="fc">&nbsp;        entity.setCep(object.getCep());</b>
+<b class="fc">&nbsp;        entity.setNumero(object.getNumero());</b>
+<b class="fc">&nbsp;        entity.setCidade(object.getCidade());</b>
+<b class="fc">&nbsp;        entity.setEstado(object.getEstado());</b>
+<b class="fc">&nbsp;        entity.setTpPrincipal(object.getTpPrincipal());</b>
+<b class="fc">&nbsp;        entity.setPessoa(pessoa);</b>
 <b class="fc">&nbsp;        return entity;</b>
-&nbsp;
-&nbsp;    }
-&nbsp;
-&nbsp;    public static Pessoa toRequestSave(PessoaDTO object) {
-<b class="nc">&nbsp;        Pessoa entity = new Pessoa();</b>
-<b class="nc">&nbsp;        entity.setId(object.getId());</b>
-<b class="nc">&nbsp;        entity.setNomeCompleto(object.getNomeCompleto());</b>
-<b class="nc">&nbsp;        entity.setDataNascimento(object.getDataNascimento());</b>
-<b class="nc">&nbsp;        entity.setEnderecos(EnderecoMapper.toRequestListSave(object.getEnderecos(), entity));</b>
-<b class="nc">&nbsp;        return entity;</b>
-&nbsp;
-&nbsp;    }
-&nbsp;
-&nbsp;    public static List&lt;Pessoa&gt; toRequestList(List&lt;PessoaDTO&gt; list) {
-<b class="fc">&nbsp;        if (!list.isEmpty()) {</b>
-<b class="fc">&nbsp;            return list.stream().map(PessoaMapper::toRequest).collect(Collectors.toList());</b>
-&nbsp;        }
-<b class="nc">&nbsp;        return new ArrayList&lt;Pessoa&gt;();</b>
-&nbsp;
-&nbsp;    }
-&nbsp;
-&nbsp;    public static List&lt;Pessoa&gt; toRequestListSave(List&lt;PessoaDTO&gt; pessoa) {
-<b class="fc">&nbsp;        return pessoa.stream().map(PessoaMapper::toRequest).collect(Collectors.toList());</b>
 &nbsp;    }
 &nbsp;}
 </code>
@@ -164,7 +130,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-04-01 18:52</div>
+    <div style="float:right;">generated on 2024-04-07 15:56</div>
 </div>
 </body>
 </html>

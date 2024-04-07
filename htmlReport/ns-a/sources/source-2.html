@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
-  <title>Coverage Report > EnderecoSaveMapper</title>
+  <title>Coverage Report > EnderecoResponseMapper</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -22,7 +22,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">com.br.teste.attus.mapper</a>
 </div>
 
-<h1>Coverage Summary for Class: EnderecoSaveMapper (com.br.teste.attus.mapper)</h1>
+<h1>Coverage Summary for Class: EnderecoResponseMapper (com.br.teste.attus.mapper)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -41,7 +41,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">EnderecoSaveMapper</td>
+  <td class="name">EnderecoResponseMapper</td>
 <td class="coverageStat">
   <span class="percent">
     100%
@@ -52,18 +52,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    50%
+    66,7%
   </span>
   <span class="absValue">
-    (1/2)
+    (2/3)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    90%
+    92,3%
   </span>
   <span class="absValue">
-    (9/10)
+    (12/13)
   </span>
 </td>
 </tr>
@@ -78,22 +78,28 @@ Current scope:     <a href="../../index.html">all classes</a>
 <code class="sourceCode" id="sourceCode">&nbsp;package com.br.teste.attus.mapper;
 &nbsp;
 &nbsp;import com.br.teste.attus.dto.EnderecoDTO;
-&nbsp;import com.br.teste.attus.dto.EnderecoSaveDTO;
 &nbsp;import com.br.teste.attus.entity.Endereco;
-&nbsp;import com.br.teste.attus.entity.Pessoa;
 &nbsp;
-<b class="nc">&nbsp;public class EnderecoSaveMapper {</b>
+&nbsp;import java.util.List;
+&nbsp;import java.util.stream.Collectors;
 &nbsp;
-&nbsp;    public static Endereco toRequest(EnderecoSaveDTO object, Pessoa pessoa) {
-<b class="fc">&nbsp;        Endereco entity = new Endereco();</b>
-<b class="fc">&nbsp;        entity.setLogradouro(object.getLogradouro());</b>
-<b class="fc">&nbsp;        entity.setCep(object.getCep());</b>
-<b class="fc">&nbsp;        entity.setNumero(object.getNumero());</b>
-<b class="fc">&nbsp;        entity.setCidade(object.getCidade());</b>
-<b class="fc">&nbsp;        entity.setEstado(object.getEstado());</b>
-<b class="fc">&nbsp;        entity.setTpPrincipal(object.getTpPrincipal());</b>
-<b class="fc">&nbsp;        entity.setPessoa(pessoa);</b>
-<b class="fc">&nbsp;        return entity;</b>
+<b class="nc">&nbsp;public class EnderecoResponseMapper {</b>
+&nbsp;    public static EnderecoDTO toReponse(Endereco object) {
+<b class="fc">&nbsp;        EnderecoDTO dto = new EnderecoDTO();</b>
+<b class="fc">&nbsp;        dto.setLogradouro(object.getLogradouro());</b>
+<b class="fc">&nbsp;        dto.setCep(object.getCep());</b>
+<b class="fc">&nbsp;        dto.setNumero(object.getNumero());</b>
+<b class="fc">&nbsp;        dto.setCidade(object.getCidade());</b>
+<b class="fc">&nbsp;        dto.setTpPrincipal(object.getTpPrincipal());</b>
+<b class="fc">&nbsp;        dto.setEstado(object.getEstado());</b>
+<b class="fc">&nbsp;        dto.setId(object.getId());</b>
+<b class="fc">&nbsp;        return dto;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static List&lt;EnderecoDTO&gt; toReponseList(List&lt;Endereco&gt; list) {
+<b class="fc">&nbsp;            return list.stream()</b>
+<b class="fc">&nbsp;                    .map(EnderecoResponseMapper::toReponse)</b>
+<b class="fc">&nbsp;                    .collect(Collectors.toList());</b>
 &nbsp;    }
 &nbsp;}
 </code>
@@ -119,7 +125,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-04-01 18:52</div>
+    <div style="float:right;">generated on 2024-04-07 15:56</div>
 </div>
 </body>
 </html>
