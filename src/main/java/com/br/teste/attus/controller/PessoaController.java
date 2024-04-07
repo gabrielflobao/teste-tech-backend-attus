@@ -31,8 +31,8 @@ public class PessoaController {
     }
     @Operation(summary = "Busca pessoa pelo ID" +
             ".",method = "GET")
-    @GetMapping("/listar/id")
-    public ResponseEntity<List<PessoaDTO>> getListPessoasById(@RequestParam List<Long> ids) {
+    @GetMapping("/listar/")
+    public ResponseEntity<List<PessoaDTO>> getListPessoasById(@RequestParam("ids") List<Long> ids) {
         List<PessoaDTO> pessoas = pessoaService.findAllById(ids);
         return ResponseEntity.ok(pessoas);
     }

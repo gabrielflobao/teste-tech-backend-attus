@@ -9,7 +9,7 @@ import java.util.List;
 
 public class PessoaSaveDTO {
     private String nomeCompleto;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date dataNascimento;
 

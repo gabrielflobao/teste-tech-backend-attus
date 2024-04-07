@@ -29,15 +29,15 @@ public class EnderecoController {
     }
     @Operation(summary = "Busca endereço pelo ID pessoa.", method = "GET")
     @GetMapping("/listar/pessoa/{id}")
-    public List<EnderecoDTO> findEnderecosPorPessoa(@PathVariable("id") Long id) {
+    public ResponseEntity<List<EnderecoDTO>> findEnderecosPorPessoa(@PathVariable("id") Long id) {
         List<EnderecoDTO> endereco = service.findByPessoaId(id);
-        return endereco;
+        return ResponseEntity.ok(endereco);
     }
 
     @Operation(summary = "Busca endereços pelos ID(s)" +
             ".", method = "GET")
-    @GetMapping("/listar/id")
-    public ResponseEntity<List<EnderecoDTO>> buscarEnderecosPorIds(@RequestParam List<Long> ids) {
+    @GetMapping("/listar/")
+    public ResponseEntity<List<EnderecoDTO>> buscarEnderecosPorIds(@RequestParam (name = "ids") List<Long> ids) {
         List<EnderecoDTO> enderecos = service.findAllById(ids);
         return ResponseEntity.ok(enderecos);
     }
@@ -59,7 +59,7 @@ public class EnderecoController {
 
     @Operation(summary = "Altera endereco principal Pelo ID" +
             ".", method = "Patch")
-    @PutMapping(value = "/update/principal/{id}")
+    @PutMapping(value = "/update/principal/")
     public ResponseEntity<EnderecoDTO> updateEnderecoPrincipalToN(@PathParam("id") Long id) {
         return ResponseEntity.ok(service.updateEnderecoPrincipalToN(id));
 

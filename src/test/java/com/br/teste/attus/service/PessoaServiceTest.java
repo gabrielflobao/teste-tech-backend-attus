@@ -3,14 +3,10 @@ package com.br.teste.attus.service;
 import com.br.teste.attus.dto.PessoaDTO;
 import com.br.teste.attus.dto.PessoaSaveDTO;
 import com.br.teste.attus.entity.Pessoa;
-import com.br.teste.attus.enuns.EstadoBrasil;
-import com.br.teste.attus.enuns.TipoPrincipal;
 import com.br.teste.attus.exceptions.pessoa.PessoaNotFoundException;
-import com.br.teste.attus.mapper.PessoaRequestMapper;
 import com.br.teste.attus.mapper.PessoaResponseMapper;
 import com.br.teste.attus.mapper.PessoaSaveResponseMapper;
 import com.br.teste.attus.repository.PessoaRepository;
-import com.br.teste.attus.utils.DateUtils;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,16 +14,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static com.br.teste.attus.commons.PessoaConstant.createTestPessoaIdNomeDataNascimento;
-import static com.br.teste.attus.utils.DateUtils.parseDate;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
@@ -106,9 +99,10 @@ class PessoaServiceTest {
         Pessoa pessoa = createTestPessoaIdNomeDataNascimento();
         List<Pessoa> pessoasLista = new ArrayList<>();
         pessoasLista.add(pessoa);
-        pessoasLista.get(0).setNomeCompleto("Lobao");
+
         List<PessoaDTO> pessoaAlterada = PessoaResponseMapper.toReponseList(pessoasLista);
         when(pessoaRepository.findAllById(List.of(pessoa.getId()))).thenReturn(pessoasLista);
+        pessoasLista.get(0).setNomeCompleto("Lobao");
         when(pessoaRepository.saveAll(List.of(pessoa))).thenReturn(pessoasLista);
         List<PessoaDTO> result = pessoaService.updatePessoas(PessoaResponseMapper.toReponseList(pessoasLista));
         Assertions.assertThat(result.containsAll(List.of(pessoaAlterada)));

@@ -12,7 +12,7 @@ import com.br.teste.attus.exceptions.pessoa.PessoaNotFoundException;
 import com.br.teste.attus.exceptions.utils.ExceptionUtils;
 import com.br.teste.attus.mapper.EnderecoRequestMapper;
 import com.br.teste.attus.mapper.EnderecoResponseMapper;
-import com.br.teste.attus.mapper.EnderecoSaveMapper;
+import com.br.teste.attus.mapper.EnderecoSaveRequestMapper;
 import com.br.teste.attus.repository.EnderecoRepository;
 import com.br.teste.attus.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ public class EnderecoService {
         List<Endereco> enderecosSalvar = new ArrayList<Endereco>();
         endereco.forEach(enderecoDTO -> {
             validateExistingPrincipal(enderecoDTO, repository, pessoa);
-            enderecosSalvar.add(EnderecoSaveMapper.toRequest(enderecoDTO, pessoa));
+            enderecosSalvar.add(EnderecoSaveRequestMapper.toRequest(enderecoDTO, pessoa));
         });
         ExceptionUtils.checkListEmptyExceptionWithMsg(enderecosSalvar, new EnderecoNotFoundException("Não há endereços para salvar",
                 "Não existem endereços para salvar"));
